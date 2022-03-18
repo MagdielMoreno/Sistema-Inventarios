@@ -90,7 +90,7 @@ namespace Sistema_Inventarios
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
             try
-            { 
+            {   
                 if (btnRegistrar.Text == "Registrar")
                 {
                     SqlCommand cmd = new SqlCommand("INSERT INTO Proveedores VALUES ('','','','','',0,'','','',''); SELECT SCOPE_IDENTITY()", sql.getConn());
