@@ -18,11 +18,12 @@ namespace Sistema_Inventarios.forms
         public inicioSesion()
         {
             InitializeComponent();
-        }
-
+        } 
+      
         private void Login_Load(object sender, EventArgs e)
         {
             sql.connect();
+
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
