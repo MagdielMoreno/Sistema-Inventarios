@@ -96,7 +96,7 @@ namespace Sistema_Inventarios.forms
                 rdbPrecio2.Checked = true;
             }
             else
-            { 
+            {
                 rdbPrecio3.Checked = true;
             }
             cboCiudad.SelectedItem = Convert.ToString(regClientes["Ciudad"]);
@@ -319,7 +319,7 @@ namespace Sistema_Inventarios.forms
                     status = 3;
                 }
                 else
-                { 
+                {
                     status = 4;
                 }
                 int nivelPrecio = 0;
@@ -328,18 +328,18 @@ namespace Sistema_Inventarios.forms
                     nivelPrecio = 1;
                 }
                 else if (rdbPrecio2.Checked)
-                { 
+                {
                     nivelPrecio = 2;
                 }
                 else
-                { 
-                    nivelPrecio = 3;    
+                {
+                    nivelPrecio = 3;
                 }
                 cmd.CommandText = "UPDATE Clientes SET " +
-                                  "RazonSocial='" + txtRazonSocial.Text + "',"+
-                                  "NombreComercial='" + txtNombreCom.Text + "',"+
-                                  "Domicilio='" + txtDomicilio.Text + "',"+
-                                  "Estado='" + idedo + "',"+
+                                  "RazonSocial='" + txtRazonSocial.Text + "'," +
+                                  "NombreComercial='" + txtNombreCom.Text + "'," +
+                                  "Domicilio='" + txtDomicilio.Text + "'," +
+                                  "Estado='" + idedo + "'," +
                                   "Ciudad='" + idcd + "'," +
                                   "CodigoPostal='" + txtCp.Text + "'," +
                                   "RFC='" + txtRfc.Text + "'," +
@@ -364,90 +364,97 @@ namespace Sistema_Inventarios.forms
                 btnRegistrar.Text = "&Registrar";
             }
         }
-
+          
         private void btnActualizar_Click(object sender, EventArgs e)
         {
-            int idedo = 0, idcd = 0;
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Clientes", sql.getConn());
-            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
-            DataTable tbEstados = new DataTable();
-            estados.Fill(tbEstados);
-            for (int m = 0; m < tbEstados.Rows.Count; m++)
+            try
             {
-                if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(cboEstado.SelectedItem))
+                int idedo = 0, idcd = 0;
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Clientes", sql.getConn());
+                SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                DataTable tbEstados = new DataTable();
+                estados.Fill(tbEstados);
+                for (int m = 0; m < tbEstados.Rows.Count; m++)
                 {
-                    idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
+                    if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(cboEstado.SelectedItem))
+                    {
+                        idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
+                    }
                 }
-            }
-            ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
-            tbCiudades = new DataTable();
-            ciudades.Fill(tbCiudades);
-            for (int m = 0; m < tbCiudades.Rows.Count; m++)
-            {
-                if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(cboCiudad.SelectedItem))
+                ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
+                tbCiudades = new DataTable();
+                ciudades.Fill(tbCiudades);
+                for (int m = 0; m < tbCiudades.Rows.Count; m++)
                 {
-                    idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
+                    if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(cboCiudad.SelectedItem))
+                    {
+                        idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
+                    }
                 }
+                int tipo = 0;
+                if (rdbContado.Checked)
+                {
+                    tipo = 1;
+                }
+                else
+                {
+                    tipo = 2;
+                }
+                int status = 0;
+                if (rdbLibre.Checked)
+                {
+                    status = 1;
+                }
+                else if (rdbControlado.Checked)
+                {
+                    status = 2;
+                }
+                else if (rdbSuspendido.Checked)
+                {
+                    status = 3;
+                }
+                else
+                {
+                    status = 4;
+                }
+                int nivelPrecio = 0;
+                if (rdbPrecio1.Checked)
+                {
+                    nivelPrecio = 1;
+                }
+                else if (rdbPrecio2.Checked)
+                {
+                    nivelPrecio = 2;
+                }
+                else
+                {
+                    nivelPrecio = 3;
+                }
+                cmd.CommandText = "UPDATE Clientes SET " +
+                                      "RazonSocial='" + txtRazonSocial.Text + "'," +
+                                      "NombreComercial='" + txtNombreCom.Text + "'," +
+                                      "Domicilio='" + txtDomicilio.Text + "'," +
+                                      "Estado='" + idedo + "'," +
+                                      "Ciudad='" + idcd + "'," +
+                                      "CodigoPostal='" + txtCp.Text + "'," +
+                                      "RFC='" + txtRfc.Text + "'," +
+                                      "Correo='" + txtCorreo.Text + "'," +
+                                      "Contacto='" + txtContacto.Text + "'," +
+                                      "Telefono='" + txtTelefono.Text + "'," +
+                                      "Tipo='" + tipo + "'," +
+                                      "Status='" + status + "'," +
+                                      "LimiteCredito='" + txtLimCredito.Text + "'," +
+                                      "Descuento='" + txtDescuento.Text + "'," +
+                                      "NivelPrecio='" + nivelPrecio + "'," +
+                                      "FechaNac='" + dtpFechaNac.Value.Date + "' " +
+                                      "WHERE Id = " + txtId.Text;
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Registro Actualizado");
             }
-            int tipo = 0;
-            if (rdbContado.Checked)
+            catch (Exception ex)
             {
-                tipo = 1;
+                MessageBox.Show(ex.ToString());
             }
-            else
-            {
-                tipo = 2;
-            }
-            int status = 0;
-            if (rdbLibre.Checked)
-            {
-                status = 1;
-            }
-            else if (rdbControlado.Checked)
-            {
-                status = 2;
-            }
-            else if (rdbSuspendido.Checked)
-            {
-                status = 3;
-            }
-            else
-            {
-                status = 4;
-            }
-            int nivelPrecio = 0;
-            if (rdbPrecio1.Checked)
-            {
-                nivelPrecio = 1;
-            }
-            else if (rdbPrecio2.Checked)
-            {
-                nivelPrecio = 2;
-            }
-            else
-            {
-                nivelPrecio = 3;
-            }
-            cmd.CommandText = "UPDATE Clientes SET " +
-                                  "RazonSocial='" + txtRazonSocial.Text + "'," +
-                                  "NombreComercial='" + txtNombreCom.Text + "'," +
-                                  "Domicilio='" + txtDomicilio.Text + "'," +
-                                  "Estado='" + idedo + "'," +
-                                  "Ciudad='" + idcd + "'," +
-                                  "CodigoPostal='" + txtCp.Text + "'," +
-                                  "RFC='" + txtRfc.Text + "'," +
-                                  "Correo='" + txtCorreo.Text + "'," +
-                                  "Contacto='" + txtContacto.Text + "'," +
-                                  "Telefono='" + txtTelefono.Text + "'," +
-                                  "Tipo='" + tipo + "'," +
-                                  "Status='" + status + "'," +
-                                  "LimiteCredito='" + txtLimCredito.Text + "'," +
-                                  "Descuento='" + txtDescuento.Text + "'," +
-                                  "NivelPrecio='" + nivelPrecio + "'," +
-                                  "FechaNac='" + dtpFechaNac.Value.Date + "' " +
-                                  "WHERE Id = " + txtId.Text;
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("Registro Actualizado");
         }
     }
-}
+} 
