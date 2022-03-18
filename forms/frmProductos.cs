@@ -60,7 +60,7 @@ namespace Sistema_Inventarios
             img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
             return ms.ToArray();
         }
-        //Byte a Image
+        //Byte a Image 
         public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
         {
             MemoryStream ms = new MemoryStream(byteImg);
@@ -71,33 +71,73 @@ namespace Sistema_Inventarios
         {
             try
             {
-                if (txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null)
+                if (btnRegistrar.Text == "Registrar")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Productos(NombreCorto,Descripcion,Costo,Precio_1,Precio_2,Precio_3) VALUES ('','',0,0,0,0); SELECT SCOPE_IDENTITY()", sql.getConn());
+                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                    btnPrimero.Enabled = false;
+                    btnUltimo.Enabled = false;
+                    btnSiguiente.Enabled = false;
+                    btnAnterior.Enabled = false;
+                    btnEliminar.Enabled = false;
+                    btnActualizar.Enabled = false;
+                    btnSalir.Enabled = false;
+                    txtNombre.Text = "";
+                    txtDescripcion.Text = "";
+                    txtCosto.Text = "";
+                    txtUnidadMedida.Text = "";
+                    txtPrecio1.Text = "";
+                    txtPrecio2.Text = "";
+                    txtPrecio3.Text = "";
+                    imgProducto.Image.Dispose();
+                    imgProducto.Image = null;
+                    txtId.Text = Convert.ToString(id);
+                    btnRegistrar.Text = "Aceptar";
                 }
                 else
                 {
-                    byte[] byteLogotipo = ImageToByteArray(imgProducto.Image); //Convertir Imagen a Byte
+                    if (txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null)
+                    {
+                        MessageBox.Show("LLena todos los campos");
+                    }
+                    else
+                    {
+                        byte[] byteLogotipo = ImageToByteArray(imgProducto.Image); //Convertir Imagen a Byte
 
-                    //Consulta SQL 
-                    string query = "INSERT INTO Productos" +
-                    "(NombreCorto, Descripcion, Costo, Precio_1, Precio_2, Precio_3, Foto) " +
-                    "VALUES " +
-                    "(@Nombre, @Descripcion, @Costo, @Precio_1, @Precio_2, @Precio_3, @Foto)";
-                    SqlCommand cmd = new SqlCommand(query, sql.connect());
-                    //Parametros
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
-                    cmd.Parameters.AddWithValue("@Descripcion", txtDescripcion.Text);
-                    cmd.Parameters.AddWithValue("@Costo", float.Parse(txtCosto.Text));
-                    cmd.Parameters.AddWithValue("@Precio_1", float.Parse(txtPrecio1.Text));
-                    cmd.Parameters.AddWithValue("@Precio_2", float.Parse(txtPrecio2.Text));
-                    cmd.Parameters.AddWithValue("@Precio_3", float.Parse(txtPrecio3.Text));
-                    cmd.Parameters.AddWithValue("@Foto", byteLogotipo);
-                    //Ejecutar Consulta
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Datos Guardados Correctamente");
-                    showData();
+                        //Consulta SQL 
+                        string query = "UPDATE Productos SET " +
+                        "NombreCorto = @Nombre," +
+                        "Descripcion = @Descripcion," +
+                        "Costo = @Costo," +
+                        "Precio_1 = @Precio_1," +
+                        "Precio_2 = @Precio_2," +
+                        "Precio_3 = @Precio_3," +
+                        "Foto = @Foto " +
+                        "WHERE id = @Id ";
+                        SqlCommand cmd = new SqlCommand(query, sql.connect());
+                        //Parametros
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
+                        cmd.Parameters.AddWithValue("@Descripcion", txtDescripcion.Text);
+                        cmd.Parameters.AddWithValue("@Costo", float.Parse(txtCosto.Text));
+                        cmd.Parameters.AddWithValue("@Precio_1", float.Parse(txtPrecio1.Text));
+                        cmd.Parameters.AddWithValue("@Precio_2", float.Parse(txtPrecio2.Text));
+                        cmd.Parameters.AddWithValue("@Precio_3", float.Parse(txtPrecio3.Text));
+                        cmd.Parameters.AddWithValue("@Foto", byteLogotipo);
+                        cmd.Parameters.AddWithValue("@Id", int.Parse(txtId.Text));
+                        //Ejecutar Consulta
+                        cmd.ExecuteNonQuery();
+                                                btnPrimero.Enabled = true;
+                        btnUltimo.Enabled = true;
+                        btnSiguiente.Enabled = true;
+                        btnAnterior.Enabled = true;
+                        btnEliminar.Enabled = true;
+                        btnActualizar.Enabled = true;
+                        btnSalir.Enabled = true;
+                        btnRegistrar.Text = "Registrar";
+                        MessageBox.Show("Datos Guardados Correctamente");
+                        showData();
+                    }
                 }
             }
             catch (Exception ex)
