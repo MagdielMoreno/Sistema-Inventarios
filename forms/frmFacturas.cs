@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
-
+//aaaaaaaaaaa
 namespace Sistema_Inventarios
 {
     public partial class frmFacturas : Form
