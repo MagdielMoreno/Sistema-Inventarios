@@ -90,35 +90,77 @@ namespace Sistema_Inventarios
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
             try
-            {
-                if (txtNombre.Text == "" || txtDomicilio.Text == "" || CboEstado.Text == "" || CboCiudad.Text == "" || txtCP.Text == "" || txtTelefono.Text == "" || txtCorreo.Text == "" || txtRFC.Text == "" || txtNombreC.Text == "" || txtContacto.Text == "" )
+            { 
+                if (btnRegistrar.Text == "Registrar")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Proveedores VALUES ('','','','','',0,'','','',''); SELECT SCOPE_IDENTITY()", sql.getConn());
+                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                    btnPrimero.Enabled = false;
+                    btnUltimo.Enabled = false;
+                    btnSiguiente.Enabled = false;
+                    btnAnterior.Enabled = false;
+                    btnEliminar.Enabled = false;
+                    btnActualizar.Enabled = false;
+                    btnSalir.Enabled = false;
+                    txtNombre.Text = "";
+                    txtDomicilio.Text = "";
+                    txtCP.Text = "";
+                    txtCorreo.Text = "";
+                    txtContacto.Text = "";
+                    txtNombreC.Text = "";
+                    txtRFC.Text = "";
+                    txtTelefono.Text = "";
+                    txtId.Text = Convert.ToString(id);
+                    btnRegistrar.Text = "Aceptar";
                 }
                 else
                 {
-                    //Consulta SQL 
-                    string query = "INSERT INTO Proveedores" +
-                    "(Nombre, Domicilio, Estado, Ciudad, CodigoPostal, Telefono, Correo, RFC, NombreComercial, Contacto) " +
-                    "VALUES " +
-                    "(@Nombre, @Domicilio, @Estado, @Ciudad, @CodigoPostal, @Telefono, @Correo, @RFC, @NombreC, @Contacto)";
-                    SqlCommand cmd = new SqlCommand(query, sql.connect());
-                    //Parametros
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
-                    cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
-                    cmd.Parameters.AddWithValue("@Estado", CboEstado.SelectedItem.ToString());
-                    cmd.Parameters.AddWithValue("@Ciudad", CboCiudad.SelectedItem.ToString());
-                    cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
-                    cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
-                    cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
-                    cmd.Parameters.AddWithValue("@RFC", txtRFC.Text);
-                    cmd.Parameters.AddWithValue("@NombreC", txtNombreC.Text);
-                    cmd.Parameters.AddWithValue("@Contacto", txtContacto.Text);
-                    //Ejecutar Consulta
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Datos Guardados Correctamente");
-                    showData();
+                    if (txtNombre.Text == "" || txtDomicilio.Text == "" || CboEstado.Text == "" || CboCiudad.Text == "" || txtCP.Text == "" || txtTelefono.Text == "" || txtCorreo.Text == "" || txtRFC.Text == "" || txtNombreC.Text == "" || txtContacto.Text == "")
+                    {
+                        MessageBox.Show("LLena todos los campos");
+                    }
+                    else
+                    {
+                        //Consulta SQL 
+                        string query = "UPDATE Proveedores SET " +
+                        "Nombre = @Nombre," +
+                        "Domicilio = @Domicilio," +
+                        "Estado = @Estado," +
+                        "Ciudad = @Ciudad," +
+                        "CodigoPostal = @CodigoPostal," +
+                        "Telefono = @Telefono," +
+                        "Correo = @Correo," +
+                        "RFC = @RFC," +
+                        "NombreComercial = @NombreC," +
+                        "Contacto = @Contacto " +
+                        "WHERE id = @Id ";
+                        SqlCommand cmd = new SqlCommand(query, sql.connect());
+                        //Parametros
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
+                        cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
+                        cmd.Parameters.AddWithValue("@Estado", CboEstado.SelectedItem.ToString());
+                        cmd.Parameters.AddWithValue("@Ciudad", CboCiudad.SelectedItem.ToString());
+                        cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
+                        cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
+                        cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
+                        cmd.Parameters.AddWithValue("@RFC", txtRFC.Text);
+                        cmd.Parameters.AddWithValue("@NombreC", txtNombreC.Text);
+                        cmd.Parameters.AddWithValue("@Contacto", txtContacto.Text);
+                        cmd.Parameters.AddWithValue("@Id", int.Parse(txtId.Text));
+                        //Ejecutar Consulta
+                        cmd.ExecuteNonQuery();
+                        btnPrimero.Enabled = true;
+                        btnUltimo.Enabled = true;
+                        btnSiguiente.Enabled = true;
+                        btnAnterior.Enabled = true;
+                        btnEliminar.Enabled = true;
+                        btnActualizar.Enabled = true;
+                        btnSalir.Enabled = true;
+                        btnRegistrar.Text = "Registrar";
+                        MessageBox.Show("Datos Guardados Correctamente");
+                        showData();
+                    }
                 }
             }
             catch (Exception ex)
