@@ -23,7 +23,7 @@ namespace Sistema_Inventarios.forms
         private void Login_Load(object sender, EventArgs e)
         {
             sql.connect();
-
+            //aasdasdasdasdasdas
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
