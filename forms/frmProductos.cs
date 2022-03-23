@@ -21,7 +21,8 @@ namespace Sistema_Inventarios
         public DataRow regProductos;
 
         int pos = 0;
-
+        string linea = "";
+        string prov = "";
         public frmProductos()
         {
             InitializeComponent();
@@ -49,10 +50,58 @@ namespace Sistema_Inventarios
             txtPrecio1.Text = Convert.ToString(regProductos["Precio_1"]);
             txtPrecio2.Text = Convert.ToString(regProductos["Precio_2"]);
             txtPrecio3.Text = Convert.ToString(regProductos["Precio_3"]);
-            byte[] byteLogotipo = ((byte[])regProductos["Foto"]);
-            imgProducto.Image = ByteArrayToImage(byteLogotipo); 
+            txtDescuento.Text = Convert.ToString(regProductos["Descuento"]); 
+            txtExistencia.Text = Convert.ToString(regProductos["Existencia"]);
+            txtUbicacion.Text = Convert.ToString(regProductos["Ubicacion"]);
+            txtCant1.Text = Convert.ToString(regProductos["CantMax"]);
+            txtCant2.Text = Convert.ToString(regProductos["CantMin"]);
+            txtCant3.Text = Convert.ToString(regProductos["CantReorden"]);
+            dtpCaducidad.Value = Convert.ToDateTime(regProductos["Caducidad"]);
+            //Llenar cboLinea
+            SqlDataAdapter lineas = new SqlDataAdapter("SELECT Nombre, Id FROM Lineas", sql.connect());
+            DataTable tbLineas = new DataTable();
+            lineas.Fill(tbLineas);
+            cboLinea.Items.Clear();
+            for (int m = 0; m < tbLineas.Rows.Count; m++)
+            {
+                cboLinea.Items.Add(tbLineas.Rows[m]["Nombre"].ToString());
+                if (Convert.ToString(tbLineas.Rows[m]["Id"]) == Convert.ToString(regProductos["Linea"]))
+                {
+                    linea = tbLineas.Rows[m]["Nombre"].ToString();
+                }
+            }
+            cboLinea.Text = linea;
+            //Llenar cboProveedor
+            SqlDataAdapter proveedores = new SqlDataAdapter("SELECT Nombre, Id FROM Proveedores", sql.connect());
+            DataTable tbProveedores = new DataTable();
+            proveedores.Fill(tbProveedores);
+            cboProveedor.Items.Clear();
+            for (int m = 0; m < tbProveedores.Rows.Count; m++)
+            {
+                cboProveedor.Items.Add(tbProveedores.Rows[m]["Nombre"].ToString());
+                if (Convert.ToString(tbProveedores.Rows[m]["Id"]) == Convert.ToString(regProductos["Proveedor"]))
+                {
+                    prov = tbProveedores.Rows[m]["Nombre"].ToString();
+                }
+            }
+            cboProveedor.Text = prov;
+            //Llenar cboVA
+            cboVA.Items.Clear();
+            cboVA.Items.Add("G");
+            cboVA.Items.Add("E");
+            cboVA.Text = Convert.ToString(regProductos["ValorAgregado"]);
+            //Imagen
+            if (regProductos["Foto"].ToString() != "")
+            {
+                byte[] byteLogotipo = ((byte[])regProductos["Foto"]);
+                imgProducto.Image = ByteArrayToImage(byteLogotipo);
+            }
+            else
+            {
+                imgProducto.Image = null;
+            }
         }
-   
+
         //Image a Byte
         public byte[] ImageToByteArray(System.Drawing.Image img)
         {
@@ -73,7 +122,8 @@ namespace Sistema_Inventarios
             {
                 if (btnRegistrar.Text == "Registrar")
                 {
-                    SqlCommand cmd = new SqlCommand("INSERT INTO Productos(NombreCorto,Descripcion,Costo,Precio_1,Precio_2,Precio_3) VALUES ('','',0,0,0,0); SELECT SCOPE_IDENTITY()", sql.getConn());
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Productos (NombreCorto, Descripcion, Linea, Costo, Precio_1, Precio_2, Precio_3, Descuento, Proveedor, Existencia, Ubicacion, CantMax, CantMin, CantReorden, Caducidad, ValorAgregado) " +
+                        "VALUES ('','',1,0,0,0,0,0,13,0,'',0,0,0,getDate(),''); SELECT SCOPE_IDENTITY()", sql.connect());
                     int id = Convert.ToInt32(cmd.ExecuteScalar());
                     btnPrimero.Enabled = false;
                     btnUltimo.Enabled = false;
@@ -85,10 +135,17 @@ namespace Sistema_Inventarios
                     txtNombre.Text = "";
                     txtDescripcion.Text = "";
                     txtCosto.Text = "";
-                    txtUnidadMedida.Text = "";
+                    txtDescuento.Text = "";
                     txtPrecio1.Text = "";
                     txtPrecio2.Text = "";
                     txtPrecio3.Text = "";
+                    txtDescuento.Text = "";
+                    txtExistencia.Text = "";
+                    txtUbicacion.Text = "";
+                    txtCant1.Text = "";
+                    txtCant2.Text = "";
+                    txtCant3.Text = "";
+                    dtpCaducidad.Value = DateTime.Now;
                     imgProducto.Image.Dispose();
                     imgProducto.Image = null;
                     txtId.Text = Convert.ToString(id);
@@ -96,14 +153,37 @@ namespace Sistema_Inventarios
                 }
                 else
                 {
-                    if (txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null)
+                    if (txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null || txtDescuento.Text == "" || txtExistencia.Text == "" || txtUbicacion.Text == "" || txtCant1.Text == "" || txtCant2.Text == "" || txtCant3.Text == "")
                     {
                         MessageBox.Show("LLena todos los campos");
                     }
                     else
                     {
                         byte[] byteLogotipo = ImageToByteArray(imgProducto.Image); //Convertir Imagen a Byte
-
+                        //Get idlinea
+                        int idlinea = 0, idprov = 0;
+                        SqlCommand cmd = new SqlCommand("SELECT * FROM Productos", sql.connect());
+                        SqlDataAdapter lineas = new SqlDataAdapter("SELECT Nombre, Id FROM Lineas", sql.connect());
+                        DataTable tbLineas = new DataTable();
+                        lineas.Fill(tbLineas);
+                        for (int m = 0; m < tbLineas.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbLineas.Rows[m]["Nombre"]) == Convert.ToString(cboLinea.SelectedItem))
+                            {
+                                idlinea = Convert.ToInt32(tbLineas.Rows[m]["Id"]);
+                            }
+                        }
+                        //Get idprov
+                        SqlDataAdapter proveedores = new SqlDataAdapter("SELECT Id, Nombre FROM Proveedores", sql.connect());
+                        DataTable tbProveedores = new DataTable();
+                        proveedores.Fill(tbProveedores);
+                        for (int m = 0; m < tbProveedores.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbProveedores.Rows[m]["Nombre"]) == Convert.ToString(cboProveedor.SelectedItem))
+                            {
+                                idprov = Convert.ToInt32(tbProveedores.Rows[m]["Id"]);
+                            }
+                        }
                         //Consulta SQL 
                         string query = "UPDATE Productos SET " +
                         "NombreCorto = @Nombre," +
@@ -112,9 +192,19 @@ namespace Sistema_Inventarios
                         "Precio_1 = @Precio_1," +
                         "Precio_2 = @Precio_2," +
                         "Precio_3 = @Precio_3," +
-                        "Foto = @Foto " +
+                        "Foto = @Foto," +
+                        "Linea = @Linea," +
+                        "Descuento = @Descuento," +
+                        "Proveedor = @Proveedor," +
+                        "Existencia = @Existencia," +
+                        "Ubicacion = @Ubicacion," +
+                        "CantMax = @CantMax," +
+                        "CantMin = @CantMin," +
+                        "CantReorden = @CantReorden," +
+                        "Caducidad = @Caducidad," +
+                        "ValorAgregado = @ValorAgregado " +
                         "WHERE id = @Id ";
-                        SqlCommand cmd = new SqlCommand(query, sql.connect());
+                        cmd = new SqlCommand(query, sql.connect());
                         //Parametros
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
@@ -124,10 +214,20 @@ namespace Sistema_Inventarios
                         cmd.Parameters.AddWithValue("@Precio_2", float.Parse(txtPrecio2.Text));
                         cmd.Parameters.AddWithValue("@Precio_3", float.Parse(txtPrecio3.Text));
                         cmd.Parameters.AddWithValue("@Foto", byteLogotipo);
+                        cmd.Parameters.AddWithValue("@Linea", idlinea); 
+                        cmd.Parameters.AddWithValue("@Descuento", float.Parse(txtDescuento.Text));
+                        cmd.Parameters.AddWithValue("@Proveedor", idprov);
+                        cmd.Parameters.AddWithValue("@Existencia", float.Parse(txtExistencia.Text));
+                        cmd.Parameters.AddWithValue("@Ubicacion", txtUbicacion.Text);
+                        cmd.Parameters.AddWithValue("@CantMax", float.Parse(txtCant1.Text));
+                        cmd.Parameters.AddWithValue("@CantMin", float.Parse(txtCant2.Text));
+                        cmd.Parameters.AddWithValue("@CantReorden", float.Parse(txtCant3.Text));
+                        cmd.Parameters.AddWithValue("@Caducidad", dtpCaducidad.Value.Date.ToString());
+                        cmd.Parameters.AddWithValue("@ValorAgregado", cboVA.SelectedItem.ToString());
                         cmd.Parameters.AddWithValue("@Id", int.Parse(txtId.Text));
                         //Ejecutar Consulta
                         cmd.ExecuteNonQuery();
-                                                btnPrimero.Enabled = true;
+                         btnPrimero.Enabled = true;
                         btnUltimo.Enabled = true;
                         btnSiguiente.Enabled = true;
                         btnAnterior.Enabled = true;
@@ -212,7 +312,7 @@ namespace Sistema_Inventarios
         {
             try
             {
-                if (txtId.Text == "" || txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null)
+                if (txtId.Text == "" || txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null || txtDescuento.Text == "" || txtExistencia.Text == "" || txtUbicacion.Text == "" || txtCant1.Text == "" || txtCant2.Text == "" || txtCant3.Text == "")
                 {
                     MessageBox.Show("LLena todos los campos");
                 }
@@ -224,6 +324,30 @@ namespace Sistema_Inventarios
                     if (dr.Read())
                     {
                         byte[] byteLogotipo = ImageToByteArray(imgProducto.Image); //Convertir Imagen a Byte
+                        //Get idlinea
+                        int idlinea = 0, idprov = 0;
+                        cmd = new SqlCommand("SELECT * FROM Productos", sql.connect());
+                        SqlDataAdapter lineas = new SqlDataAdapter("SELECT Nombre, Id FROM Lineas", sql.connect());
+                        DataTable tbLineas = new DataTable();
+                        lineas.Fill(tbLineas);
+                        for (int m = 0; m < tbLineas.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbLineas.Rows[m]["Nombre"]) == Convert.ToString(cboLinea.SelectedItem))
+                            {
+                                idlinea = Convert.ToInt32(tbLineas.Rows[m]["Id"]);
+                            }
+                        }
+                        //Get idprov
+                        SqlDataAdapter proveedores = new SqlDataAdapter("SELECT Id, Nombre FROM Proveedores", sql.connect());
+                        DataTable tbProveedores = new DataTable();
+                        proveedores.Fill(tbProveedores);
+                        for (int m = 0; m < tbProveedores.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbProveedores.Rows[m]["Nombre"]) == Convert.ToString(cboProveedor.SelectedItem))
+                            {
+                                idprov = Convert.ToInt32(tbProveedores.Rows[m]["Id"]);
+                            }
+                        }
                         //Consulta SQL
                         query = "UPDATE Productos SET " +
                         "NombreCorto = @Nombre," +
@@ -232,7 +356,17 @@ namespace Sistema_Inventarios
                         "Precio_1 = @Precio_1," +
                         "Precio_2 = @Precio_2," +
                         "Precio_3 = @Precio_3," +
-                        "Foto = @Foto " +
+                        "Foto = @Foto," +
+                        "Linea = @Linea," +
+                        "Descuento = @Descuento," +
+                        "Proveedor = @Proveedor," +
+                        "Existencia = @Existencia," +
+                        "Ubicacion = @Ubicacion," +
+                        "CantMax = @CantMax," +
+                        "CantMin = @CantMin," +
+                        "CantReorden = @CantReorden," +
+                        "Caducidad = @Caducidad," +
+                        "ValorAgregado = @ValorAgregado " +
                         "WHERE id = @Id ";
                         cmd = new SqlCommand(query, sql.connect());
                         //Parametros
@@ -244,12 +378,22 @@ namespace Sistema_Inventarios
                         cmd.Parameters.AddWithValue("@Precio_2", float.Parse(txtPrecio2.Text));
                         cmd.Parameters.AddWithValue("@Precio_3", float.Parse(txtPrecio3.Text));
                         cmd.Parameters.AddWithValue("@Foto", byteLogotipo);
+                        cmd.Parameters.AddWithValue("@Linea", idlinea);
+                        cmd.Parameters.AddWithValue("@Descuento", float.Parse(txtDescuento.Text));
+                        cmd.Parameters.AddWithValue("@Proveedor", idprov);
+                        cmd.Parameters.AddWithValue("@Existencia", float.Parse(txtExistencia.Text));
+                        cmd.Parameters.AddWithValue("@Ubicacion", txtUbicacion.Text);
+                        cmd.Parameters.AddWithValue("@CantMax", float.Parse(txtCant1.Text));
+                        cmd.Parameters.AddWithValue("@CantMin", float.Parse(txtCant2.Text));
+                        cmd.Parameters.AddWithValue("@CantReorden", float.Parse(txtCant3.Text));
+                        cmd.Parameters.AddWithValue("@Caducidad", dtpCaducidad.Value.Date.ToString());
+                        cmd.Parameters.AddWithValue("@ValorAgregado", cboVA.SelectedItem.ToString());
                         cmd.Parameters.AddWithValue("@Id", int.Parse(txtId.Text));
                         //Ejecutar Consulta
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Datos Actualizados Correctamente");
                         showData();
-                    }
+                    } 
                     else
                     {
                         MessageBox.Show("ID Invalido");

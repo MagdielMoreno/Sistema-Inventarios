@@ -104,6 +104,7 @@ namespace Sistema_Inventarios.forms
             SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
             DataTable tbEstados = new DataTable();
             estados.Fill(tbEstados);
+            cboEstado.Items.Clear();
             for (int m = 0; m < tbEstados.Rows.Count; m++)
             {
                 cboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
@@ -224,144 +225,157 @@ namespace Sistema_Inventarios.forms
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Quieres eliminar a este cliente?", "Advertencia", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            try
             {
-                SqlCommand cmd = new SqlCommand("DELETE FROM Clientes WHERE Id = " + txtId.Text, sql.getConn());
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Eliminado");
-                if (BindingContext[tbClientes, "Clientes"].Position == 0)
+                if (MessageBox.Show("Quieres eliminar a este cliente?", "Advertencia", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    m += 1;
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Clientes WHERE Id = " + txtId.Text, sql.getConn());
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Eliminado");
+                    if (BindingContext[tbClientes, "Clientes"].Position == 0)
+                    {
+                        m += 1;
+                    }
+                    else
+                    {
+                        m -= 1;
+                    }
+                    showData();
                 }
-                else
-                {
-                    m -= 1;
-                }
-                showData();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            if (btnRegistrar.Text == "&Registrar")
+            try
             {
-                SqlCommand cmd = new SqlCommand("INSERT INTO Clientes VALUES ('','','',1,1,'','','','','',1,1,0,0,1,getDate()) ; SELECT SCOPE_IDENTITY()", sql.getConn());
-                int id = Convert.ToInt32(cmd.ExecuteScalar());
-                btnPrimero.Enabled = false;
-                btnUltimo.Enabled = false;
-                btnSiguiente.Enabled = false;
-                btnAnterior.Enabled = false;
-                btnEliminar.Enabled = false;
-                btnActualizar.Enabled = false;
-                btnSalir.Enabled = false;
-                rdbPrecio1.Checked = true;
-                rdbContado.Checked = true;
-                rdbLibre.Checked = true;
-                txtId.Text = Convert.ToString(id);
-                txtRazonSocial.Text = "";
-                txtNombreCom.Text = "";
-                txtDomicilio.Text = "";
-                txtCp.Text = "";
-                txtRfc.Text = "";
-                txtCorreo.Text = "";
-                txtLimCredito.Text = "";
-                txtContacto.Text = "";
-                txtTelefono.Text = "";
-                txtDescuento.Text = "";
-                cboEstado.SelectedIndex = 0;
-                dtpFechaNac.Value = DateTime.Now;
-                btnRegistrar.Text = "Aceptar";
-            }
-            else
+                if (btnRegistrar.Text == "&Registrar")
+                {
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Clientes VALUES ('','','',1,1,'','','','','',1,1,0,0,1,getDate()) ; SELECT SCOPE_IDENTITY()", sql.getConn());
+                    int id = Convert.ToInt32(cmd.ExecuteScalar());
+                    btnPrimero.Enabled = false;
+                    btnUltimo.Enabled = false;
+                    btnSiguiente.Enabled = false;
+                    btnAnterior.Enabled = false;
+                    btnEliminar.Enabled = false;
+                    btnActualizar.Enabled = false;
+                    btnSalir.Enabled = false;
+                    rdbPrecio1.Checked = true;
+                    rdbContado.Checked = true;
+                    rdbLibre.Checked = true;
+                    txtId.Text = Convert.ToString(id);
+                    txtRazonSocial.Text = "";
+                    txtNombreCom.Text = "";
+                    txtDomicilio.Text = "";
+                    txtCp.Text = "";
+                    txtRfc.Text = "";
+                    txtCorreo.Text = "";
+                    txtLimCredito.Text = "";
+                    txtContacto.Text = "";
+                    txtTelefono.Text = "";
+                    txtDescuento.Text = "";
+                    cboEstado.SelectedIndex = 0;
+                    dtpFechaNac.Value = DateTime.Now;
+                    btnRegistrar.Text = "Aceptar";
+                }
+                else
+                {
+                    int idedo = 0, idcd = 0;
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM Clientes", sql.getConn());
+                    SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                    DataTable tbEstados = new DataTable();
+                    estados.Fill(tbEstados);
+                    for (int m = 0; m < tbEstados.Rows.Count; m++)
+                    {
+                        if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(cboEstado.SelectedItem))
+                        {
+                            idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
+                        }
+                    }
+                    ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
+                    tbCiudades = new DataTable();
+                    ciudades.Fill(tbCiudades);
+                    for (int m = 0; m < tbCiudades.Rows.Count; m++)
+                    {
+                        if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(cboCiudad.SelectedItem))
+                        {
+                            idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
+                        }
+                    }
+                    int tipo = 0;
+                    if (rdbContado.Checked)
+                    {
+                        tipo = 1;
+                    }
+                    else
+                    {
+                        tipo = 2;
+                    }
+                    int status = 0;
+                    if (rdbLibre.Checked)
+                    {
+                        status = 1;
+                    }
+                    else if (rdbControlado.Checked)
+                    {
+                        status = 2;
+                    }
+                    else if (rdbSuspendido.Checked)
+                    {
+                        status = 3;
+                    }
+                    else
+                    {
+                        status = 4;
+                    }
+                    int nivelPrecio = 0;
+                    if (rdbPrecio1.Checked)
+                    {
+                        nivelPrecio = 1;
+                    }
+                    else if (rdbPrecio2.Checked)
+                    {
+                        nivelPrecio = 2;
+                    }
+                    else
+                    {
+                        nivelPrecio = 3;
+                    }
+                    cmd.CommandText = "UPDATE Clientes SET " +
+                                      "RazonSocial='" + txtRazonSocial.Text + "'," +
+                                      "NombreComercial='" + txtNombreCom.Text + "'," +
+                                      "Domicilio='" + txtDomicilio.Text + "'," +
+                                      "Estado='" + idedo + "'," +
+                                      "Ciudad='" + idcd + "'," +
+                                      "CodigoPostal='" + txtCp.Text + "'," +
+                                      "RFC='" + txtRfc.Text + "'," +
+                                      "Correo='" + txtCorreo.Text + "'," +
+                                      "Contacto='" + txtContacto.Text + "'," +
+                                      "Telefono='" + txtTelefono.Text + "'," +
+                                      "Tipo='" + tipo + "'," +
+                                      "Status='" + status + "'," +
+                                      "LimiteCredito='" + txtLimCredito.Text + "'," +
+                                      "Descuento='" + txtDescuento.Text + "'," +
+                                      "NivelPrecio='" + nivelPrecio + "'," +
+                                      "FechaNac='" + dtpFechaNac.Value.Date.ToString() + "' " +
+                                      "WHERE Id = " + txtId.Text;
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Datos Guardados Correctamente");
+                    btnPrimero.Enabled = true;
+                    btnUltimo.Enabled = true;
+                    btnSiguiente.Enabled = true;
+                    btnAnterior.Enabled = true;
+                    btnEliminar.Enabled = true;
+                    btnActualizar.Enabled = true;
+                    btnSalir.Enabled = true;
+                    btnRegistrar.Text = "&Registrar";
+                }
+            }catch (Exception ex)
             {
-                int idedo = 0, idcd = 0;
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Clientes", sql.getConn());
-                SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
-                DataTable tbEstados = new DataTable();
-                estados.Fill(tbEstados);
-                for (int m = 0; m < tbEstados.Rows.Count; m++)
-                {
-                    if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(cboEstado.SelectedItem))
-                    {
-                        idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
-                    }
-                }
-                ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
-                tbCiudades = new DataTable();
-                ciudades.Fill(tbCiudades);
-                for (int m = 0; m < tbCiudades.Rows.Count; m++)
-                {
-                    if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(cboCiudad.SelectedItem))
-                    {
-                        idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
-                    }
-                }
-                int tipo = 0;
-                if (rdbContado.Checked)
-                {
-                    tipo = 1;
-                }
-                else
-                {
-                    tipo = 2;
-                }
-                int status = 0;
-                if (rdbLibre.Checked)
-                {
-                    status = 1;
-                }
-                else if (rdbControlado.Checked)
-                {
-                    status = 2;
-                }
-                else if (rdbSuspendido.Checked)
-                {
-                    status = 3;
-                }
-                else
-                {
-                    status = 4;
-                }
-                int nivelPrecio = 0;
-                if (rdbPrecio1.Checked)
-                {
-                    nivelPrecio = 1;
-                }
-                else if (rdbPrecio2.Checked)
-                {
-                    nivelPrecio = 2;
-                }
-                else
-                {
-                    nivelPrecio = 3;
-                }
-                cmd.CommandText = "UPDATE Clientes SET " +
-                                  "RazonSocial='" + txtRazonSocial.Text + "'," +
-                                  "NombreComercial='" + txtNombreCom.Text + "'," +
-                                  "Domicilio='" + txtDomicilio.Text + "'," +
-                                  "Estado='" + idedo + "'," +
-                                  "Ciudad='" + idcd + "'," +
-                                  "CodigoPostal='" + txtCp.Text + "'," +
-                                  "RFC='" + txtRfc.Text + "'," +
-                                  "Correo='" + txtCorreo.Text + "'," +
-                                  "Contacto='" + txtContacto.Text + "'," +
-                                  "Telefono='" + txtTelefono.Text + "'," +
-                                  "Tipo='" + tipo + "'," +
-                                  "Status='" + status + "'," +
-                                  "LimiteCredito='" + txtLimCredito.Text + "'," +
-                                  "Descuento='" + txtDescuento.Text + "'," +
-                                  "NivelPrecio='" + nivelPrecio + "'," +
-                                  "FechaNac='" + dtpFechaNac.Value.Date + "' " +
-                                  "WHERE Id = " + txtId.Text;
-                cmd.ExecuteNonQuery();
-                btnPrimero.Enabled = true;
-                btnUltimo.Enabled = true;
-                btnSiguiente.Enabled = true;
-                btnAnterior.Enabled = true;
-                btnEliminar.Enabled = true;
-                btnActualizar.Enabled = true;
-                btnSalir.Enabled = true;
-                btnRegistrar.Text = "&Registrar";
+                MessageBox.Show(ex.ToString());
             }
         }
           
@@ -390,7 +404,7 @@ namespace Sistema_Inventarios.forms
                     {
                         idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
                     }
-                }
+                } 
                 int tipo = 0;
                 if (rdbContado.Checked)
                 {
@@ -446,7 +460,7 @@ namespace Sistema_Inventarios.forms
                                       "LimiteCredito='" + txtLimCredito.Text + "'," +
                                       "Descuento='" + txtDescuento.Text + "'," +
                                       "NivelPrecio='" + nivelPrecio + "'," +
-                                      "FechaNac='" + dtpFechaNac.Value.Date + "' " +
+                                      "FechaNac='" + dtpFechaNac.Value.Date.ToString() + "' " +
                                       "WHERE Id = " + txtId.Text;
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Registro Actualizado");

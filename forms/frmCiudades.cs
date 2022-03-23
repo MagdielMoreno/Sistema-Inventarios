@@ -117,7 +117,7 @@ namespace Sistema_Inventarios
             }
             */
         }
-
+         
         private void BtnUltimo_Click(object sender, EventArgs e)
         {
             pos = TBControl.Tables["Control"].Rows.Count - 1;
@@ -296,7 +296,6 @@ namespace Sistema_Inventarios
             {
                 CboEstado.SelectedIndex = -1;
             }
-            
         }
     }
 }

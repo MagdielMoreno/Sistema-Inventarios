@@ -16,9 +16,11 @@ namespace Sistema_Inventarios
         public SqlDataAdapter bdProveedores;
         public DataSet tbProveedores;
         public DataRow regProveedores;
-        SQL sql = new SQL();
+        SQL sql = new SQL(); 
 
-        int pos = 0;
+        string edo;
+        Boolean inn = false;
+
         public frmProveedores()
         {
             InitializeComponent();
@@ -28,7 +30,7 @@ namespace Sistema_Inventarios
         {
             //sql.connect();
             showData();
-            LlenarCboEstados();
+            //LlenarCboEstados();
         }
         public void LlenarCboEstados()
         {
@@ -41,6 +43,7 @@ namespace Sistema_Inventarios
                 {
                     CboEstado.Items.Add(dr["Nombre"].ToString());
                 }
+                dr.Close();
             }
             catch (Exception ex)
             {
@@ -50,6 +53,7 @@ namespace Sistema_Inventarios
         //LlenarCboCiudades
         public void LlenarCboCiudades()
         {
+            CboCiudad.Items.Clear();
             try
             {
                 //Obtener ID del Estado
@@ -61,6 +65,7 @@ namespace Sistema_Inventarios
                 {
                     id = int.Parse(dr["Id"].ToString());
                 }
+                dr.Close();
                 //Llenar CboCiudades 
                 string query2 = "SELECT Nombre FROM Ciudades WHERE IdEdo = " + id;
                 SqlCommand cmd2 = new SqlCommand(query2, sql.connect());
@@ -69,17 +74,25 @@ namespace Sistema_Inventarios
                 {
                     CboCiudad.Items.Add(dr2["Nombre"].ToString());
                 }
+                dr2.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
+            CboCiudad.SelectedIndex = 0;
         }
 
         private void CboEstado_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CboCiudad.Items.Clear();
-            LlenarCboCiudades();
+            try
+            {
+                LlenarCboCiudades();
+            } 
+            catch (Exception ex)
+            {
+                CboCiudad.Text = "";
+            }
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -93,7 +106,7 @@ namespace Sistema_Inventarios
             {   
                 if (btnRegistrar.Text == "Registrar")
                 {
-                    SqlCommand cmd = new SqlCommand("INSERT INTO Proveedores VALUES ('','','','','',0,'','','',''); SELECT SCOPE_IDENTITY()", sql.getConn());
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Proveedores VALUES ('','',1,1,'',0,'','','',''); SELECT SCOPE_IDENTITY()", sql.getConn());
                     int id = Convert.ToInt32(cmd.ExecuteScalar());
                     btnPrimero.Enabled = false;
                     btnUltimo.Enabled = false;
@@ -121,6 +134,28 @@ namespace Sistema_Inventarios
                     }
                     else
                     {
+                        int idedo = 0, idcd = 0;
+                        SqlCommand cmd = new SqlCommand("SELECT * FROM Proveedores", sql.getConn());
+                        SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                        DataTable tbEstados = new DataTable();
+                        estados.Fill(tbEstados);
+                        for (int m = 0; m < tbEstados.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
+                            {
+                                idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
+                            }
+                        }
+                        ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
+                        tbCiudades = new DataTable();
+                        ciudades.Fill(tbCiudades);
+                        for (int m = 0; m < tbCiudades.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(CboCiudad.SelectedItem))
+                            {
+                                idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
+                            }
+                        }
                         //Consulta SQL 
                         string query = "UPDATE Proveedores SET " +
                         "Nombre = @Nombre," +
@@ -134,13 +169,13 @@ namespace Sistema_Inventarios
                         "NombreComercial = @NombreC," +
                         "Contacto = @Contacto " +
                         "WHERE id = @Id ";
-                        SqlCommand cmd = new SqlCommand(query, sql.connect());
+                        cmd = new SqlCommand(query, sql.connect());
                         //Parametros
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
                         cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
-                        cmd.Parameters.AddWithValue("@Estado", CboEstado.SelectedItem.ToString());
-                        cmd.Parameters.AddWithValue("@Ciudad", CboCiudad.SelectedItem.ToString());
+                        cmd.Parameters.AddWithValue("@Estado", idedo);
+                        cmd.Parameters.AddWithValue("@Ciudad", idcd);
                         cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
                         cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
                         cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
@@ -225,6 +260,29 @@ namespace Sistema_Inventarios
                     SqlDataReader dr = cmd.ExecuteReader();
                     if (dr.Read())
                     {
+                        dr.Close();
+                        int idedo = 0, idcd = 0;
+                        cmd = new SqlCommand("SELECT * FROM Proveedores", sql.getConn());
+                        SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                        DataTable tbEstados = new DataTable();
+                        estados.Fill(tbEstados);
+                        for (int m = 0; m < tbEstados.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
+                            {
+                                idedo = Convert.ToInt32(tbEstados.Rows[m]["Id"]);
+                            }
+                        }
+                        ciudades = new SqlDataAdapter("SELECT Id, Nombre FROM Ciudades", sql.getConn());
+                        tbCiudades = new DataTable();
+                        ciudades.Fill(tbCiudades);
+                        for (int m = 0; m < tbCiudades.Rows.Count; m++)
+                        {
+                            if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(CboCiudad.SelectedItem))
+                            {
+                                idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
+                            }
+                        }
                         //Consulta SQL
                         query = "UPDATE Proveedores SET " +
                         "Nombre = @Nombre," +
@@ -243,8 +301,8 @@ namespace Sistema_Inventarios
                         cmd.Parameters.Clear();
                         cmd.Parameters.AddWithValue("@Nombre", txtNombre.Text);
                         cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
-                        cmd.Parameters.AddWithValue("@Estado", CboEstado.SelectedItem.ToString());
-                        cmd.Parameters.AddWithValue("@Ciudad", CboCiudad.SelectedItem.ToString());
+                        cmd.Parameters.AddWithValue("@Estado", idedo);
+                        cmd.Parameters.AddWithValue("@Ciudad", idcd);
                         cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
                         cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
                         cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
@@ -268,7 +326,7 @@ namespace Sistema_Inventarios
                 MessageBox.Show(ex.ToString());
             }
         }
-
+        
         private void btnPrimero_Click(object sender, EventArgs e)
         {
             pos = 0;
@@ -291,14 +349,19 @@ namespace Sistema_Inventarios
             pos += 1;
             showData();
         }
-
+        int pos = 0;
         public void showData()
         {
-            SqlCommand cmd = new SqlCommand("SELECT * FROM Proveedores",  sql.connect());
+            SqlCommand cmd = new SqlCommand("SELECT dbo.Proveedores.Id, dbo.Proveedores.Nombre, dbo.Proveedores.Domicilio, " +
+                "dbo.Proveedores.CodigoPostal, dbo.Proveedores.Telefono, dbo.Proveedores.Correo, dbo.Proveedores.RFC, " +
+                "dbo.Proveedores.NombreComercial, dbo.Proveedores.Contacto, Ciudades.Nombre AS Ciudad, Estados.Nombre AS Estado " +
+                "FROM dbo.Proveedores INNER JOIN " +
+                "Ciudades ON Proveedores.Ciudad = Ciudades.Id INNER JOIN " +
+                "Estados ON Proveedores.Estado = Estados.Id AND Ciudades.IdEdo = Estados.Id", sql.connect());
             bdProveedores = new SqlDataAdapter(cmd);
             tbProveedores = new DataSet();
             bdProveedores.Fill(tbProveedores, "Proveedores");
-            if (pos >= BindingContext[tbProveedores, "Proveedores"].Count - 1)
+            if (pos >= BindingContext[tbProveedores, "Proveedores"].Count)
             {
                 pos -= 1;
             }
@@ -312,16 +375,57 @@ namespace Sistema_Inventarios
             txtId.Text = Convert.ToString(regProveedores["Id"]);
             txtNombre.Text = Convert.ToString(regProveedores["Nombre"]);
             txtDomicilio.Text = Convert.ToString(regProveedores["Domicilio"]);
-            CboEstado.SelectedItem = Convert.ToString(regProveedores["Estado"]);
-            CboCiudad.SelectedItem = Convert.ToString(regProveedores["Ciudad"]);
             txtCP.Text = Convert.ToString(regProveedores["CodigoPostal"]);
             txtTelefono.Text = Convert.ToString(regProveedores["Telefono"]);
             txtCorreo.Text = Convert.ToString(regProveedores["Correo"]);
             txtRFC.Text = Convert.ToString(regProveedores["RFC"]);
             txtNombreC.Text = Convert.ToString(regProveedores["NombreComercial"]);
             txtContacto.Text = Convert.ToString(regProveedores["Contacto"]);
+            
+            CboCiudad.SelectedItem = Convert.ToString(regProveedores["Ciudad"]);
+            CboEstado.SelectedItem = Convert.ToString(regProveedores["Estado"]);
+            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+            DataTable tbEstados = new DataTable();
+            estados.Fill(tbEstados);
+            CboEstado.Items.Clear();
+            for (int m = 0; m < tbEstados.Rows.Count; m++)
+            {
+                CboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
+                if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(regProveedores["Estado"]))
+                {
+                    edo = tbEstados.Rows[m]["Nombre"].ToString();
+                }
+            }
+            CboEstado.SelectedItem = edo;
+            LlenarCboCiudades();
+            updateCiudad();
         }
-
-
+        SqlDataAdapter ciudades;
+        DataTable tbCiudades;
+        public void updateCiudad()
+        {
+            ciudades = new SqlDataAdapter("SELECT C.Nombre, C.Id FROM Estados E INNER JOIN Ciudades C ON E.Id = C.IdEdo WHERE E.Nombre = '" + Convert.ToString(edo) + "';", sql.getConn());
+            tbCiudades = new DataTable();
+            ciudades.Fill(tbCiudades);
+            string selected = "";
+            Boolean flag = false;
+            CboCiudad.Items.Clear();
+            for (int m = 0; m < tbCiudades.Rows.Count; m++)
+            {
+                CboCiudad.Items.Add(tbCiudades.Rows[m]["Nombre"].ToString());
+                if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(regProveedores["Ciudad"]))
+                {
+                    selected = tbCiudades.Rows[m]["Nombre"].ToString();
+                    flag = true;
+                }
+                if (flag)
+                {
+                    CboCiudad.SelectedIndex = 0;
+                }
+            }
+            CboCiudad.SelectedItem = selected;
+            tbCiudades.Clear();
+            ciudades.Dispose();
+        }
     }
 }
