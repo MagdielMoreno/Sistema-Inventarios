@@ -60,7 +60,9 @@ namespace Sistema_Inventarios.forms
             txtCorreo.Text = Convert.ToString(regClientes["Correo"]);
             txtContacto.Text = Convert.ToString(regClientes["Contacto"]);
             txtTelefono.Text = Convert.ToString(regClientes["Telefono"]);
+
             dtpFechaNac.Value = Convert.ToDateTime(regClientes["FechaNac"]);
+
             if (Convert.ToString(regClientes["Tipo"]) == "1")
             {
                 rdbContado.Checked = true;
