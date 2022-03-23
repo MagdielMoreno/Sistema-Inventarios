@@ -70,6 +70,8 @@ namespace Sistema_Inventarios
             float descuentoTotal = subtotal * (Convert.ToSingle(regClientes["Descuento"]) / 100);
             float iva = (subtotal - descuentoTotal) * (Convert.ToSingle(regControl["IVA"]) / 100);
             float total = subtotal - descuentoTotal + iva;
+            txtDescuento.Text = descuentoTotal.ToString();
+            txtIva.Text = iva.ToString();
             txtTotal.Text = total.ToString();
         }
 
