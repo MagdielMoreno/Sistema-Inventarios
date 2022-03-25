@@ -394,7 +394,7 @@ namespace Sistema_Inventarios
                         MessageBox.Show("Datos Actualizados Correctamente");
                         showData();
                     } 
-                    else
+                    else 
                     {
                         MessageBox.Show("ID Invalido");
                     }

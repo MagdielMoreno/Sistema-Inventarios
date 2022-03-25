@@ -17,7 +17,7 @@ namespace Sistema_Inventarios
         public DataSet tbProveedores;
         public DataRow regProveedores;
         SQL sql = new SQL(); 
-
+         
         string edo;
         Boolean inn = false;
 

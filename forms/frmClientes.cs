@@ -405,8 +405,8 @@ namespace Sistema_Inventarios.forms
                     if (Convert.ToString(tbCiudades.Rows[m]["Nombre"]) == Convert.ToString(cboCiudad.SelectedItem))
                     {
                         idcd = Convert.ToInt32(tbCiudades.Rows[m]["Id"]);
-                    }
-                } 
+                    } 
+                }  
                 int tipo = 0;
                 if (rdbContado.Checked)
                 {

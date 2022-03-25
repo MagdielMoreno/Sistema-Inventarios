@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
-
+using System.Data.SqlClient; 
+ 
 namespace Sistema_Inventarios 
 {
     public partial class frmEstados : Form
