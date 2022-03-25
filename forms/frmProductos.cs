@@ -393,7 +393,7 @@ namespace Sistema_Inventarios
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Datos Actualizados Correctamente");
                         showData();
-                    } 
+                    }  
                     else 
                     {
                         MessageBox.Show("ID Invalido");
