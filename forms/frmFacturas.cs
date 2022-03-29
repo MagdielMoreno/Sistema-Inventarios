@@ -162,8 +162,6 @@ namespace Sistema_Inventarios
             txtDescuento.Text = Convert.ToString(regClientes["Descuento"]) + "%";
         }
 
-
-
         public frmFacturas()
         {
             InitializeComponent();
