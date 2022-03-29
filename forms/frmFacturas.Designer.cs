@@ -65,6 +65,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dgvProductos = new System.Windows.Forms.DataGridView();
+            this.Clave = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Importe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.controlBtns = new System.Windows.Forms.Panel();
             this.btnSalir = new System.Windows.Forms.Button();
             this.btnImprimir = new System.Windows.Forms.Button();
@@ -75,12 +81,8 @@
             this.btnUltimo = new System.Windows.Forms.Button();
             this.btnPrimero = new System.Windows.Forms.Button();
             this.txtNumLetra = new System.Windows.Forms.TextBox();
-            this.Clave = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Importe = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEnviar = new System.Windows.Forms.Button();
+            this.btnGuardar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -448,112 +450,6 @@
             this.dgvProductos.TabIndex = 0;
             this.dgvProductos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_CellEndEdit);
             // 
-            // controlBtns
-            // 
-            this.controlBtns.Controls.Add(this.btnSalir);
-            this.controlBtns.Controls.Add(this.btnImprimir);
-            this.controlBtns.Controls.Add(this.btnEliminar);
-            this.controlBtns.Controls.Add(this.btnRegistrar);
-            this.controlBtns.Controls.Add(this.btnAnterior);
-            this.controlBtns.Controls.Add(this.btnSiguiente);
-            this.controlBtns.Controls.Add(this.btnUltimo);
-            this.controlBtns.Controls.Add(this.btnPrimero);
-            this.controlBtns.Location = new System.Drawing.Point(0, 474);
-            this.controlBtns.Name = "controlBtns";
-            this.controlBtns.Size = new System.Drawing.Size(1103, 68);
-            this.controlBtns.TabIndex = 2;
-            // 
-            // btnSalir
-            // 
-            this.btnSalir.BackColor = System.Drawing.SystemColors.Window;
-            this.btnSalir.Location = new System.Drawing.Point(1004, 15);
-            this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(87, 32);
-            this.btnSalir.TabIndex = 7;
-            this.btnSalir.Text = "Salir";
-            this.btnSalir.UseVisualStyleBackColor = false;
-            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
-            // 
-            // btnImprimir
-            // 
-            this.btnImprimir.BackColor = System.Drawing.SystemColors.Window;
-            this.btnImprimir.Location = new System.Drawing.Point(864, 15);
-            this.btnImprimir.Name = "btnImprimir";
-            this.btnImprimir.Size = new System.Drawing.Size(87, 32);
-            this.btnImprimir.TabIndex = 6;
-            this.btnImprimir.Text = "&Imprimir";
-            this.btnImprimir.UseVisualStyleBackColor = false;
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnEliminar.Location = new System.Drawing.Point(724, 15);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(87, 32);
-            this.btnEliminar.TabIndex = 5;
-            this.btnEliminar.Text = "&Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = false;
-            // 
-            // btnRegistrar
-            // 
-            this.btnRegistrar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnRegistrar.Location = new System.Drawing.Point(584, 15);
-            this.btnRegistrar.Name = "btnRegistrar";
-            this.btnRegistrar.Size = new System.Drawing.Size(87, 32);
-            this.btnRegistrar.TabIndex = 4;
-            this.btnRegistrar.Text = "&Registrar";
-            this.btnRegistrar.UseVisualStyleBackColor = false;
-            this.btnRegistrar.Click += new System.EventHandler(this.btnRegistrar_Click);
-            // 
-            // btnAnterior
-            // 
-            this.btnAnterior.BackColor = System.Drawing.SystemColors.Window;
-            this.btnAnterior.Location = new System.Drawing.Point(444, 15);
-            this.btnAnterior.Name = "btnAnterior";
-            this.btnAnterior.Size = new System.Drawing.Size(87, 32);
-            this.btnAnterior.TabIndex = 3;
-            this.btnAnterior.Text = "&Anterior";
-            this.btnAnterior.UseVisualStyleBackColor = false;
-            // 
-            // btnSiguiente
-            // 
-            this.btnSiguiente.BackColor = System.Drawing.SystemColors.Window;
-            this.btnSiguiente.Location = new System.Drawing.Point(292, 15);
-            this.btnSiguiente.Name = "btnSiguiente";
-            this.btnSiguiente.Size = new System.Drawing.Size(99, 32);
-            this.btnSiguiente.TabIndex = 2;
-            this.btnSiguiente.Text = "&Siguiente";
-            this.btnSiguiente.UseVisualStyleBackColor = false;
-            // 
-            // btnUltimo
-            // 
-            this.btnUltimo.BackColor = System.Drawing.SystemColors.Window;
-            this.btnUltimo.Location = new System.Drawing.Point(152, 15);
-            this.btnUltimo.Name = "btnUltimo";
-            this.btnUltimo.Size = new System.Drawing.Size(87, 32);
-            this.btnUltimo.TabIndex = 1;
-            this.btnUltimo.Text = "&Ultimo";
-            this.btnUltimo.UseVisualStyleBackColor = false;
-            // 
-            // btnPrimero
-            // 
-            this.btnPrimero.BackColor = System.Drawing.SystemColors.Window;
-            this.btnPrimero.Location = new System.Drawing.Point(12, 15);
-            this.btnPrimero.Name = "btnPrimero";
-            this.btnPrimero.Size = new System.Drawing.Size(87, 32);
-            this.btnPrimero.TabIndex = 0;
-            this.btnPrimero.Text = "&Primero";
-            this.btnPrimero.UseVisualStyleBackColor = false;
-            // 
-            // txtNumLetra
-            // 
-            this.txtNumLetra.BackColor = System.Drawing.SystemColors.Window;
-            this.txtNumLetra.Location = new System.Drawing.Point(0, 439);
-            this.txtNumLetra.Name = "txtNumLetra";
-            this.txtNumLetra.ReadOnly = true;
-            this.txtNumLetra.Size = new System.Drawing.Size(1103, 26);
-            this.txtNumLetra.TabIndex = 8;
-            // 
             // Clave
             // 
             this.Clave.HeaderText = "Clave";
@@ -607,6 +503,134 @@
             this.Importe.Name = "Importe";
             this.Importe.ReadOnly = true;
             this.Importe.Width = 150;
+            // 
+            // controlBtns
+            // 
+            this.controlBtns.Controls.Add(this.btnGuardar);
+            this.controlBtns.Controls.Add(this.btnEnviar);
+            this.controlBtns.Controls.Add(this.btnSalir);
+            this.controlBtns.Controls.Add(this.btnImprimir);
+            this.controlBtns.Controls.Add(this.btnEliminar);
+            this.controlBtns.Controls.Add(this.btnRegistrar);
+            this.controlBtns.Controls.Add(this.btnAnterior);
+            this.controlBtns.Controls.Add(this.btnSiguiente);
+            this.controlBtns.Controls.Add(this.btnUltimo);
+            this.controlBtns.Controls.Add(this.btnPrimero);
+            this.controlBtns.Location = new System.Drawing.Point(0, 474);
+            this.controlBtns.Name = "controlBtns";
+            this.controlBtns.Size = new System.Drawing.Size(1103, 68);
+            this.controlBtns.TabIndex = 2;
+            // 
+            // btnSalir
+            // 
+            this.btnSalir.BackColor = System.Drawing.SystemColors.Window;
+            this.btnSalir.Location = new System.Drawing.Point(780, 15);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(87, 32);
+            this.btnSalir.TabIndex = 7;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = false;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
+            // 
+            // btnImprimir
+            // 
+            this.btnImprimir.BackColor = System.Drawing.SystemColors.Window;
+            this.btnImprimir.Location = new System.Drawing.Point(672, 15);
+            this.btnImprimir.Name = "btnImprimir";
+            this.btnImprimir.Size = new System.Drawing.Size(87, 32);
+            this.btnImprimir.TabIndex = 6;
+            this.btnImprimir.Text = "&Imprimir";
+            this.btnImprimir.UseVisualStyleBackColor = false;
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnEliminar.Location = new System.Drawing.Point(564, 15);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(87, 32);
+            this.btnEliminar.TabIndex = 5;
+            this.btnEliminar.Text = "&Eliminar";
+            this.btnEliminar.UseVisualStyleBackColor = false;
+            // 
+            // btnRegistrar
+            // 
+            this.btnRegistrar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnRegistrar.Location = new System.Drawing.Point(456, 15);
+            this.btnRegistrar.Name = "btnRegistrar";
+            this.btnRegistrar.Size = new System.Drawing.Size(87, 32);
+            this.btnRegistrar.TabIndex = 4;
+            this.btnRegistrar.Text = "&Registrar";
+            this.btnRegistrar.UseVisualStyleBackColor = false;
+            this.btnRegistrar.Click += new System.EventHandler(this.btnRegistrar_Click);
+            // 
+            // btnAnterior
+            // 
+            this.btnAnterior.BackColor = System.Drawing.SystemColors.Window;
+            this.btnAnterior.Location = new System.Drawing.Point(348, 15);
+            this.btnAnterior.Name = "btnAnterior";
+            this.btnAnterior.Size = new System.Drawing.Size(87, 32);
+            this.btnAnterior.TabIndex = 3;
+            this.btnAnterior.Text = "&Anterior";
+            this.btnAnterior.UseVisualStyleBackColor = false;
+            // 
+            // btnSiguiente
+            // 
+            this.btnSiguiente.BackColor = System.Drawing.SystemColors.Window;
+            this.btnSiguiente.Location = new System.Drawing.Point(228, 15);
+            this.btnSiguiente.Name = "btnSiguiente";
+            this.btnSiguiente.Size = new System.Drawing.Size(99, 32);
+            this.btnSiguiente.TabIndex = 2;
+            this.btnSiguiente.Text = "&Siguiente";
+            this.btnSiguiente.UseVisualStyleBackColor = false;
+            // 
+            // btnUltimo
+            // 
+            this.btnUltimo.BackColor = System.Drawing.SystemColors.Window;
+            this.btnUltimo.Location = new System.Drawing.Point(120, 15);
+            this.btnUltimo.Name = "btnUltimo";
+            this.btnUltimo.Size = new System.Drawing.Size(87, 32);
+            this.btnUltimo.TabIndex = 1;
+            this.btnUltimo.Text = "&Ultimo";
+            this.btnUltimo.UseVisualStyleBackColor = false;
+            // 
+            // btnPrimero
+            // 
+            this.btnPrimero.BackColor = System.Drawing.SystemColors.Window;
+            this.btnPrimero.Location = new System.Drawing.Point(12, 15);
+            this.btnPrimero.Name = "btnPrimero";
+            this.btnPrimero.Size = new System.Drawing.Size(87, 32);
+            this.btnPrimero.TabIndex = 0;
+            this.btnPrimero.Text = "&Primero";
+            this.btnPrimero.UseVisualStyleBackColor = false;
+            // 
+            // txtNumLetra
+            // 
+            this.txtNumLetra.BackColor = System.Drawing.SystemColors.Window;
+            this.txtNumLetra.Location = new System.Drawing.Point(0, 439);
+            this.txtNumLetra.Name = "txtNumLetra";
+            this.txtNumLetra.ReadOnly = true;
+            this.txtNumLetra.Size = new System.Drawing.Size(1103, 26);
+            this.txtNumLetra.TabIndex = 8;
+            // 
+            // btnEnviar
+            // 
+            this.btnEnviar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnEnviar.Location = new System.Drawing.Point(994, 3);
+            this.btnEnviar.Name = "btnEnviar";
+            this.btnEnviar.Size = new System.Drawing.Size(106, 62);
+            this.btnEnviar.TabIndex = 8;
+            this.btnEnviar.Text = "Enviar Factura";
+            this.btnEnviar.UseVisualStyleBackColor = false;
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnGuardar.Location = new System.Drawing.Point(882, 3);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(106, 62);
+            this.btnGuardar.TabIndex = 9;
+            this.btnGuardar.Text = "Guardar Factura";
+            this.btnGuardar.UseVisualStyleBackColor = false;
             // 
             // frmFacturas
             // 
@@ -692,5 +716,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Descuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn Importe;
+        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.Button btnEnviar;
     }
 }

@@ -19,7 +19,6 @@ namespace Sistema_Inventarios
         SQL sql = new SQL(); 
          
         string edo;
-        Boolean inn = false;
 
         public frmProveedores()
         {
@@ -89,7 +88,7 @@ namespace Sistema_Inventarios
             {
                 LlenarCboCiudades();
             } 
-            catch (Exception ex)
+            catch
             {
                 CboCiudad.Text = "";
             }

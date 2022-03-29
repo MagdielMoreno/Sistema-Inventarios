@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
+using System.Net.Mail;
+using System.Net;
 //Test push
 namespace Sistema_Inventarios
 {
@@ -26,7 +28,9 @@ namespace Sistema_Inventarios
                 int index = dgvProductos.CurrentRow.Index;
                 dgvProductos.Rows[index].Cells[0].Value = Convert.ToString(regProd["Id"]);
                 dgvProductos.Rows[index].Cells[1].Value = Convert.ToString(regProd["Descripcion"]);
+                dgvProductos.Rows[index].Cells[2].Value = "1";
                 dgvProductos.Rows[index].Cells[3].Value = Convert.ToString(regProd["Descuento"]);
+                float precio = 0;
                 if (Convert.ToString(regClientes["NivelPrecio"]) == "1")
                 {
                     dgvProductos.Rows[index].Cells[4].Value = Convert.ToString(regProd["Precio_1"]);
@@ -39,7 +43,10 @@ namespace Sistema_Inventarios
                 {
                     dgvProductos.Rows[index].Cells[4].Value = Convert.ToString(regProd["Precio_3"]);
                 }
-                dgvProductos.Rows[index].Cells[5].Value = 0;
+                precio = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value);
+                float desc = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) * (Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) / 100);
+                float imp = precio - desc;
+                dgvProductos.Rows[index].Cells[5].Value = Convert.ToString(imp);
                 if (regProd["Foto"] != DBNull.Value)
                 {
                     byte[] byteImg = ((byte[])regProd["Foto"]);
@@ -108,11 +115,11 @@ namespace Sistema_Inventarios
         {
             dgvProductos.Rows.Add();
             dgvProductos.Rows[0].Cells[0].Selected = false;
-            dgvProductos.Rows[dgvProductos.CurrentRow.Index].Cells[2].Selected = false;
-            dgvProductos.Rows[dgvProductos.Rows.Count - 1].Cells[2].Selected = true;
+            dgvProductos.ClearSelection();
+            int pos = dgvProductos.Rows.Count - 1;
+            dgvProductos.CurrentCell = dgvProductos.Rows[pos].Cells[0];
         }
 
-        
         private void frmFacturas_Load(object sender, EventArgs e)
         {
             sql.connect();
