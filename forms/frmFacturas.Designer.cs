@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
@@ -65,13 +65,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dgvProductos = new System.Windows.Forms.DataGridView();
-            this.Clave = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Importe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.controlBtns = new System.Windows.Forms.Panel();
+            this.btnGuardar = new System.Windows.Forms.Button();
+            this.btnEnviar = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
             this.btnImprimir = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
@@ -81,8 +77,13 @@
             this.btnUltimo = new System.Windows.Forms.Button();
             this.btnPrimero = new System.Windows.Forms.Button();
             this.txtNumLetra = new System.Windows.Forms.TextBox();
-            this.btnEnviar = new System.Windows.Forms.Button();
-            this.btnGuardar = new System.Windows.Forms.Button();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.Clave = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Importe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -450,60 +451,6 @@
             this.dgvProductos.TabIndex = 0;
             this.dgvProductos.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProductos_CellEndEdit);
             // 
-            // Clave
-            // 
-            this.Clave.HeaderText = "Clave";
-            this.Clave.Name = "Clave";
-            this.Clave.ReadOnly = true;
-            this.Clave.Width = 60;
-            // 
-            // Descripcion
-            // 
-            this.Descripcion.HeaderText = "Descripcion";
-            this.Descripcion.Name = "Descripcion";
-            this.Descripcion.ReadOnly = true;
-            this.Descripcion.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Descripcion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Descripcion.Width = 350;
-            // 
-            // Cantidad
-            // 
-            dataGridViewCellStyle1.Format = "N2";
-            dataGridViewCellStyle1.NullValue = null;
-            this.Cantidad.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Cantidad.HeaderText = "Cantidad";
-            this.Cantidad.Name = "Cantidad";
-            // 
-            // Descuento
-            // 
-            dataGridViewCellStyle2.Format = "N2";
-            dataGridViewCellStyle2.NullValue = null;
-            this.Descuento.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Descuento.HeaderText = "Descuento";
-            this.Descuento.Name = "Descuento";
-            this.Descuento.ReadOnly = true;
-            // 
-            // Precio
-            // 
-            dataGridViewCellStyle3.Format = "N2";
-            dataGridViewCellStyle3.NullValue = null;
-            this.Precio.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Precio.HeaderText = "Precio";
-            this.Precio.Name = "Precio";
-            this.Precio.ReadOnly = true;
-            // 
-            // Importe
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.Format = "N2";
-            dataGridViewCellStyle4.NullValue = null;
-            this.Importe.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Importe.HeaderText = "Importe";
-            this.Importe.Name = "Importe";
-            this.Importe.ReadOnly = true;
-            this.Importe.Width = 150;
-            // 
             // controlBtns
             // 
             this.controlBtns.Controls.Add(this.btnGuardar);
@@ -520,6 +467,29 @@
             this.controlBtns.Name = "controlBtns";
             this.controlBtns.Size = new System.Drawing.Size(1103, 68);
             this.controlBtns.TabIndex = 2;
+            // 
+            // btnGuardar
+            // 
+            this.btnGuardar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnGuardar.Enabled = false;
+            this.btnGuardar.Location = new System.Drawing.Point(882, 3);
+            this.btnGuardar.Name = "btnGuardar";
+            this.btnGuardar.Size = new System.Drawing.Size(106, 62);
+            this.btnGuardar.TabIndex = 9;
+            this.btnGuardar.Text = "Guardar Factura";
+            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
+            // 
+            // btnEnviar
+            // 
+            this.btnEnviar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnEnviar.Enabled = false;
+            this.btnEnviar.Location = new System.Drawing.Point(994, 3);
+            this.btnEnviar.Name = "btnEnviar";
+            this.btnEnviar.Size = new System.Drawing.Size(106, 62);
+            this.btnEnviar.TabIndex = 8;
+            this.btnEnviar.Text = "Enviar Factura";
+            this.btnEnviar.UseVisualStyleBackColor = false;
             // 
             // btnSalir
             // 
@@ -612,25 +582,62 @@
             this.txtNumLetra.Size = new System.Drawing.Size(1103, 26);
             this.txtNumLetra.TabIndex = 8;
             // 
-            // btnEnviar
+            // printDocument1
             // 
-            this.btnEnviar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnEnviar.Location = new System.Drawing.Point(994, 3);
-            this.btnEnviar.Name = "btnEnviar";
-            this.btnEnviar.Size = new System.Drawing.Size(106, 62);
-            this.btnEnviar.TabIndex = 8;
-            this.btnEnviar.Text = "Enviar Factura";
-            this.btnEnviar.UseVisualStyleBackColor = false;
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
             // 
-            // btnGuardar
+            // Clave
             // 
-            this.btnGuardar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnGuardar.Location = new System.Drawing.Point(882, 3);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(106, 62);
-            this.btnGuardar.TabIndex = 9;
-            this.btnGuardar.Text = "Guardar Factura";
-            this.btnGuardar.UseVisualStyleBackColor = false;
+            this.Clave.HeaderText = "Clave";
+            this.Clave.Name = "Clave";
+            this.Clave.ReadOnly = true;
+            this.Clave.Width = 60;
+            // 
+            // Descripcion
+            // 
+            this.Descripcion.HeaderText = "Descripcion";
+            this.Descripcion.Name = "Descripcion";
+            this.Descripcion.ReadOnly = true;
+            this.Descripcion.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Descripcion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Descripcion.Width = 350;
+            // 
+            // Cantidad
+            // 
+            dataGridViewCellStyle5.Format = "N2";
+            dataGridViewCellStyle5.NullValue = null;
+            this.Cantidad.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Cantidad.HeaderText = "Cantidad";
+            this.Cantidad.Name = "Cantidad";
+            // 
+            // Descuento
+            // 
+            dataGridViewCellStyle6.Format = "N2";
+            dataGridViewCellStyle6.NullValue = null;
+            this.Descuento.DefaultCellStyle = dataGridViewCellStyle6;
+            this.Descuento.HeaderText = "Descuento";
+            this.Descuento.Name = "Descuento";
+            // 
+            // Precio
+            // 
+            dataGridViewCellStyle7.Format = "N2";
+            dataGridViewCellStyle7.NullValue = null;
+            this.Precio.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Precio.HeaderText = "Precio";
+            this.Precio.Name = "Precio";
+            this.Precio.ReadOnly = true;
+            // 
+            // Importe
+            // 
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.Format = "N2";
+            dataGridViewCellStyle8.NullValue = null;
+            this.Importe.DefaultCellStyle = dataGridViewCellStyle8;
+            this.Importe.HeaderText = "Importe";
+            this.Importe.Name = "Importe";
+            this.Importe.ReadOnly = true;
+            this.Importe.Width = 150;
             // 
             // frmFacturas
             // 
@@ -710,13 +717,14 @@
         private System.Windows.Forms.PictureBox pctFotoProducto;
         private System.Windows.Forms.ComboBox cboProdFact;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.Button btnEnviar;
+        private System.Drawing.Printing.PrintDocument printDocument1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clave;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn Importe;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnEnviar;
     }
 }

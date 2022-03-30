@@ -44,7 +44,7 @@ namespace Sistema_Inventarios
                     dgvProductos.Rows[index].Cells[4].Value = Convert.ToString(regProd["Precio_3"]);
                 }
                 precio = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value);
-                float desc = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) * (Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) / 100);
+                float desc = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) * (Convert.ToSingle(dgvProductos.Rows[index].Cells[3].Value) / 100);
                 float imp = precio - desc;
                 dgvProductos.Rows[index].Cells[5].Value = Convert.ToString(imp);
                 if (regProd["Foto"] != DBNull.Value)
@@ -52,16 +52,19 @@ namespace Sistema_Inventarios
                     byte[] byteImg = ((byte[])regProd["Foto"]);
                     pctFotoProducto.Image = ByteArrayToImage(byteImg);
                 }
+                calcTotales();
             }
             else 
             {
                 MessageBox.Show("Agrega un producto primero!");
             }
+            btnGuardar.Enabled = true;
+            btnEnviar.Enabled = true;
         }
 
         public DataRow regFacturas, regProdFact, regClientes, regProd, regControl;
 
-        private void dgvProductos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        void calcTotales()
         {
             int index = dgvProductos.CurrentRow.Index;
             float descuento = Convert.ToSingle(dgvProductos.Rows[index].Cells[3].Value) / 100;
@@ -80,6 +83,33 @@ namespace Sistema_Inventarios
             txtDescuento.Text = descuentoTotal.ToString();
             txtIva.Text = iva.ToString();
             txtTotal.Text = total.ToString();
+        }
+
+        private void dgvProductos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            calcTotales();
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            PrintPreviewDialog ppd = new PrintPreviewDialog();
+            ppd.Document = printDocument1;
+            ((Form)ppd).WindowState = FormWindowState.Maximized;
+            ppd.ShowDialog();
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString("Factura No. " + txtFolio.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 120));
+            e.Graphics.DrawString("Cliente: " + cboCliente.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 140));
+            e.Graphics.DrawString(txtDatosPersonales.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 160));
+            e.Graphics.DrawString(dtpFecha.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 180));
+            if (rdbContado.Checked)
+                e.Graphics.DrawString("CONTADO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 200));
+            else
+                e.Graphics.DrawString("CREDITO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 200));
+            e.Graphics.DrawRectangle(Pens.Black, 40, 100, 780, 200);
+
         }
 
         private void rdbCredito_CheckedChanged(object sender, EventArgs e)
@@ -114,10 +144,8 @@ namespace Sistema_Inventarios
         private void btnAgregarProd_Click(object sender, EventArgs e)
         {
             dgvProductos.Rows.Add();
-            dgvProductos.Rows[0].Cells[0].Selected = false;
             dgvProductos.ClearSelection();
-            int pos = dgvProductos.Rows.Count - 1;
-            dgvProductos.CurrentCell = dgvProductos.Rows[pos].Cells[0];
+            dgvProductos.CurrentCell = dgvProductos.Rows[dgvProductos.Rows.Count - 1].Cells[0];
         }
 
         private void frmFacturas_Load(object sender, EventArgs e)
@@ -160,6 +188,8 @@ namespace Sistema_Inventarios
             opcionesProd.Enabled = true;
             cboProdFact.Enabled = true;
             txtDescuento.Text = Convert.ToString(regClientes["Descuento"]) + "%";
+            dgvProductos.Rows.Add();
+            cboProdFact.Focus();
         }
 
         public frmFacturas()
