@@ -45,6 +45,7 @@ namespace Sistema_Inventarios
                 {
                     dgvProductos.Rows[index].Cells[4].Value = Convert.ToString(regProd["Precio_3"]);
                 }
+                dgvProductos.Rows[index].Cells[6].Value = Convert.ToString(regProd["Costo"]);
                 precio = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value);
                 float desc = Convert.ToSingle(dgvProductos.Rows[index].Cells[4].Value) * (Convert.ToSingle(dgvProductos.Rows[index].Cells[3].Value) / 100);
                 float imp = precio - desc;
@@ -95,45 +96,68 @@ namespace Sistema_Inventarios
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (txtFolio.Text == "" || txtDatosPersonales.Text == "" || txtObservaciones.Text == "")
-                MessageBox.Show("LLena todos los campos y genera el folio");
+                MessageBox.Show("LLena todos los campos");
             else
             {
+                string query1 = "INSERT INTO FacturasVtas VALUES(" +
+                    "@Cliente," +
+                    "@Fecha," +
+                    "@Observacion," +
+                    "@Status," +
+                    "@Tipo," +
+                    "@EnvioFactura," +
+                    "@Impreso," +
+                    "@Timbrado); SELECT SCOPE_IDENTITY()";
+                SqlCommand cmd1 = new SqlCommand(query1, sql.getConn());
+                cmd1.Parameters.Clear();
+                cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
+                cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
+                cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
+                cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
+                if (rdbContado.Checked)
+                    cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
+                else
+                    cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
+                cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
+                cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
+                cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
+                int folio = 0;
+                try
+                {
+                    folio = Convert.ToInt32(cmd1.ExecuteScalar());
+                    MessageBox.Show("Factura guardada");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+                SqlCommand cmd2 = new SqlCommand("", sql.getConn());
                 for (int m = 0; m < dgvProductos.RowCount; m++)
                 {
-                    string query = "UPDATE FacturasVtas SET " +
-                        "Cliente = @Cliente," +
-                        "Fecha = @Fecha," +
-                        "Observacion = @Observacion," +
-                        "Status = @Status," +
-                        "Tipo = @Tipo," +
-                        "EnvioFactura = @EnvioFactura," +
-                        "Impreso = @Impreso," +
-                        "Timbrado = @Timbrado " +
-                        "Where Id = @Id";
-                    SqlCommand cmd1 = new SqlCommand(query, sql.getConn());
-                    cmd1.Parameters.Clear();
-                    cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
-                    cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
-                    cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
-                    cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
-                    if(rdbContado.Checked)
-                        cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
-                    else
-                        cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
-                    cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
-                    cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
-                    cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
-                    cmd1.Parameters.AddWithValue("@Id", Convert.ToInt32(txtFolio.Text));
+                    string query2 = "INSERT INTO ProductosVendidos VALUES(" +
+                    "@Folio," +
+                    "@Producto," +
+                    "@Cantidad," +
+                    "@Descuento," +
+                    "@Precio," +
+                    "@Costo)";
+                    cmd2.CommandText = query2;
+                    cmd2.Parameters.Clear();
+                    cmd2.Parameters.AddWithValue("@Folio", folio);
+                    cmd2.Parameters.AddWithValue("@Producto", Convert.ToInt16(dgvProductos.Rows[m].Cells[0].Value));
+                    cmd2.Parameters.AddWithValue("@Cantidad", Convert.ToInt16(dgvProductos.Rows[m].Cells[2].Value));
+                    cmd2.Parameters.AddWithValue("@Descuento", Convert.ToSingle(dgvProductos.Rows[m].Cells[3].Value));
+                    cmd2.Parameters.AddWithValue("@Precio", Convert.ToSingle(dgvProductos.Rows[m].Cells[4].Value));
+                    cmd2.Parameters.AddWithValue("@Costo", Convert.ToSingle(dgvProductos.Rows[m].Cells[6].Value));
                     try
                     {
-                        cmd1.ExecuteNonQuery();
-                        MessageBox.Show("Factura guardada");
+                        cmd2.ExecuteNonQuery();
                     }
                     catch (Exception ex)
-                    { 
-                        MessageBox.Show("Error: " + ex.Message);
+                    {
+                        MessageBox.Show("Error al guardar productos: "+ex.Message);
                     }
-                    //subtotal += Convert.ToSingle(dgvProductos.Rows[m].Cells[5].Value);
+                    
                 }
                 PrintPreviewDialog ppd = new PrintPreviewDialog();
                 ppd.Document = printDocument1;
@@ -175,12 +199,12 @@ namespace Sistema_Inventarios
             SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
             DataSet tbControl = new DataSet();
             dbControl.Fill(tbControl, "Control");
-            DataRow reg = tbControl.Tables["Control"].Rows[0];
+            DataRow reg = tbControl.Tables["Control"].Rows[0]; 
             byte[] byteImg = ((byte[])reg["Logo"]);
             Image img = ByteArrayToImage(byteImg);
             Bitmap imgbitmap = new Bitmap(img);
             Image resizedImage = resizeImage(imgbitmap, 100, 100);
-
+            //Datos Factura 
             e.Graphics.DrawImage(resizedImage, new Point(50, 30));
             e.Graphics.DrawString("Factura No. " + txtFolio.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 150));
             e.Graphics.DrawString("Cliente: " + cboCliente.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 150));
@@ -193,7 +217,7 @@ namespace Sistema_Inventarios
             e.Graphics.DrawString("Observaciones:", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 240));
             e.Graphics.DrawString(txtObservaciones.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 260));
             e.Graphics.DrawRectangle(Pens.Black, 40, 20, 780, 280);
-
+            //Datos Productos
             int i = 300;
             e.Graphics.DrawString("Clave", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, i + 20));
             e.Graphics.DrawString("Producto", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(150, i + 20));
@@ -213,7 +237,7 @@ namespace Sistema_Inventarios
                 i += 20; 
                 e.Graphics.DrawRectangle(Pens.Black, 40, i + 20, 780, (float)0.5);
             }
-
+            //Totales
             e.Graphics.DrawRectangle(Pens.Black, 40, 320, 780, 620);
             e.Graphics.DrawString("Subtotal: $" + txtSubtotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 980));
             e.Graphics.DrawString("Descuento: $" + txtDescuento.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1000));
