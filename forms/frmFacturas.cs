@@ -92,10 +92,52 @@ namespace Sistema_Inventarios
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            PrintPreviewDialog ppd = new PrintPreviewDialog();
-            ppd.Document = printDocument1;
-            ((Form)ppd).WindowState = FormWindowState.Maximized;
-            ppd.ShowDialog();
+            if (txtFolio.Text == "" || txtDatosPersonales.Text == "" || txtObservaciones.Text == "")
+                MessageBox.Show("LLena todos los campos y genera el folio");
+            else
+            {
+                for (int m = 0; m < dgvProductos.RowCount; m++)
+                {
+                    string query = "UPDATE FacturasVtas SET " +
+                        "Cliente = @Cliente," +
+                        "Fecha = @Fecha," +
+                        "Observacion = @Observacion," +
+                        "Status = @Status," +
+                        "Tipo = @Tipo," +
+                        "EnvioFactura = @EnvioFactura," +
+                        "Impreso = @Impreso," +
+                        "Timbrado = @Timbrado " +
+                        "Where Id = @Id";
+                    SqlCommand cmd1 = new SqlCommand(query, sql.getConn());
+                    cmd1.Parameters.Clear();
+                    cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
+                    cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
+                    cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
+                    cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
+                    if(rdbContado.Checked)
+                        cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
+                    else
+                        cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
+                    cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
+                    cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
+                    cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
+                    cmd1.Parameters.AddWithValue("@Id", Convert.ToInt32(txtFolio.Text));
+                    try
+                    {
+                        cmd1.ExecuteNonQuery();
+                        MessageBox.Show("Factura guardada");
+                    }
+                    catch (Exception ex)
+                    { 
+                        MessageBox.Show("Error: " + ex.Message);
+                    }
+                    //subtotal += Convert.ToSingle(dgvProductos.Rows[m].Cells[5].Value);
+                }
+                PrintPreviewDialog ppd = new PrintPreviewDialog();
+                ppd.Document = printDocument1;
+                ((Form)ppd).WindowState = FormWindowState.Maximized;
+                ppd.ShowDialog();
+            }
         }
 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
@@ -110,6 +152,14 @@ namespace Sistema_Inventarios
                 e.Graphics.DrawString("CREDITO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 200));
             e.Graphics.DrawRectangle(Pens.Black, 40, 100, 780, 200);
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SqlCommand cmd = new SqlCommand("INSERT INTO FacturasVtas VALUES ("+Convert.ToInt16(regClientes["Id"])+",getDate(),'',1,1,0,0,0); SELECT SCOPE_IDENTITY()", sql.connect());
+            int id = Convert.ToInt32(cmd.ExecuteScalar());
+            txtFolio.Text = Convert.ToString(id);
+            txtFolio.Enabled = false;
         }
 
         private void rdbCredito_CheckedChanged(object sender, EventArgs e)
@@ -188,6 +238,7 @@ namespace Sistema_Inventarios
             opcionesProd.Enabled = true;
             cboProdFact.Enabled = true;
             txtDescuento.Text = Convert.ToString(regClientes["Descuento"]) + "%";
+            txtObservaciones.ReadOnly = false;
             dgvProductos.Rows.Add();
             cboProdFact.Focus();
         }
