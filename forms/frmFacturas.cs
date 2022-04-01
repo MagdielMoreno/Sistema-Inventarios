@@ -100,6 +100,7 @@ namespace Sistema_Inventarios
             else
             {
                 string query1 = "INSERT INTO FacturasVtas VALUES(" +
+                    "@Id," +
                     "@Cliente," +
                     "@Fecha," +
                     "@Observacion," +
@@ -107,30 +108,42 @@ namespace Sistema_Inventarios
                     "@Tipo," +
                     "@EnvioFactura," +
                     "@Impreso," +
-                    "@Timbrado); SELECT SCOPE_IDENTITY()";
+                    "@Timbrado)";
                 SqlCommand cmd1 = new SqlCommand(query1, sql.getConn());
                 cmd1.Parameters.Clear();
+                cmd1.Parameters.AddWithValue("@Id", Convert.ToInt32(txtFolio.Text));
                 cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
                 cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
                 cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
                 cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
                 if (rdbContado.Checked)
+                {
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
+                }
                 else
+                {
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
+                }
                 cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
-                int folio = 0;
+                int folio = Convert.ToInt32(txtFolio.Text);
                 try
                 {
-                    folio = Convert.ToInt32(cmd1.ExecuteScalar());
+                    cmd1.ExecuteScalar();
                     MessageBox.Show("Factura guardada");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
                 }
+                string query3 = "";
+                if (rdbContado.Checked)
+                    query3 = "UPDATE Control SET FolioVtasContado = FolioVtasContado + 1";
+                else
+                    query3 = "UPDATE Control SET FolioVtasCredito = FolioVtasCredito + 1";
+                SqlCommand cmd3 = new SqlCommand(query3, sql.getConn());
+                cmd3.ExecuteNonQuery();
                 SqlCommand cmd2 = new SqlCommand("", sql.getConn());
                 for (int m = 0; m < dgvProductos.RowCount; m++)
                 {
@@ -159,6 +172,9 @@ namespace Sistema_Inventarios
                     }
                     
                 }
+                tbControl.Clear();
+                bdControl.Fill(tbControl, "Control");
+                regControl = tbControl.Tables["Control"].Rows[0];
                 PrintPreviewDialog ppd = new PrintPreviewDialog();
                 ppd.Document = printDocument1;
                 ((Form)ppd).WindowState = FormWindowState.Maximized;
@@ -267,6 +283,16 @@ namespace Sistema_Inventarios
         {
             cboCliente.Enabled = true;
             cboCliente.Focus();
+            cboCliente.SelectedIndex = -1;
+            txtDatosPersonales.Text = "";
+            txtObservaciones.Text = "";
+            txtFolio.Text = "";
+            cboProdFact.SelectedIndex = -1;
+            txtSubtotal.Text = "";
+            txtDescuento.Text = "";
+            txtIva.Text = "";
+            txtTotal.Text = "";
+            dgvProductos.Rows.Clear();
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
