@@ -254,11 +254,21 @@ namespace Sistema_Inventarios
                 e.Graphics.DrawRectangle(Pens.Black, 40, i + 20, 780, (float)0.5);
             }
             //Totales
+            StringFormat sf1 = new StringFormat();
+            sf1.Alignment = StringAlignment.Near;
+            sf1.LineAlignment = StringAlignment.Near;
+            StringFormat sf2 = new StringFormat();
+            sf2.Alignment = StringAlignment.Far;
+            sf2.LineAlignment = StringAlignment.Far;
             e.Graphics.DrawRectangle(Pens.Black, 40, 320, 780, 620);
-            e.Graphics.DrawString("Subtotal: $" + txtSubtotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 980));
-            e.Graphics.DrawString("Descuento: $" + txtDescuento.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1000));
-            e.Graphics.DrawString("IVA: $" + txtIva.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1020));
-            e.Graphics.DrawString("Total: $" + txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1040));
+            e.Graphics.DrawString("Subtotal:", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 980), sf1);
+            e.Graphics.DrawString(txtSubtotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1000), sf2);
+            e.Graphics.DrawString("Descuento:", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1000), sf1);
+            e.Graphics.DrawString(txtDescuento.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1020), sf2);
+            e.Graphics.DrawString("IVA:", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1020), sf1);
+            e.Graphics.DrawString(txtIva.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1040), sf2);
+            e.Graphics.DrawString("Total:", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 1040), sf1);
+            e.Graphics.DrawString(txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
             e.Graphics.DrawRectangle(Pens.Black, 40, 960, 780, 120);
         }
         private void button1_Click(object sender, EventArgs e)
