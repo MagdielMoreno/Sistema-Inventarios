@@ -13,7 +13,7 @@ namespace Sistema_Inventarios
 {
     public partial class frmLineaProd : Form
     {
-        SQL sql = new SQL();
+        SQL sql = new SQL(); 
         public SqlDataAdapter bdLineas;
         public DataSet tbLineas;
         public DataRow regLineas;

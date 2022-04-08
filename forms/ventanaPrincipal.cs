@@ -16,7 +16,7 @@ namespace Sistema_Inventarios
         {
             InitializeComponent();
         }
-
+         
         private void datosDeLaEmpresaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             forms.datosEmpresa datos_Empresa = new forms.datosEmpresa();

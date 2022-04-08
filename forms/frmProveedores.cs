@@ -354,7 +354,7 @@ namespace Sistema_Inventarios
             SqlCommand cmd = new SqlCommand("SELECT dbo.Proveedores.Id, dbo.Proveedores.Nombre, dbo.Proveedores.Domicilio, " +
                 "dbo.Proveedores.CodigoPostal, dbo.Proveedores.Telefono, dbo.Proveedores.Correo, dbo.Proveedores.RFC, " +
                 "dbo.Proveedores.NombreComercial, dbo.Proveedores.Contacto, Ciudades.Nombre AS Ciudad, Estados.Nombre AS Estado " +
-                "FROM dbo.Proveedores INNER JOIN " +
+                "FROM dbo.Proveedores INNER JOIN " + 
                 "Ciudades ON Proveedores.Ciudad = Ciudades.Id INNER JOIN " +
                 "Estados ON Proveedores.Estado = Estados.Id AND Ciudades.IdEdo = Estados.Id", sql.connect());
             bdProveedores = new SqlDataAdapter(cmd);

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Sistema_Inventarios.forms
 {
@@ -23,6 +24,14 @@ namespace Sistema_Inventarios.forms
         private void Login_Load(object sender, EventArgs e)
         {
             sql.connect();
+            string queryComm = "SELECT * FROM Control";
+            SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
+            SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
+            DataSet tbControl = new DataSet();
+            dbControl.Fill(tbControl, "Control");
+            DataRow reg = tbControl.Tables["Control"].Rows[0];
+            byte[] byteImg = ((byte[])reg["Logo"]);
+            pictureBox1.Image = ByteArrayToImage(byteImg);
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -31,7 +40,7 @@ namespace Sistema_Inventarios.forms
             SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
             SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
             DataSet tbControl = new DataSet();
-            dbControl.Fill(tbControl, "Control");
+            dbControl.Fill(tbControl, "Control"); 
             DataRow reg = tbControl.Tables["Control"].Rows[0];
             if (txtUsuario.Text == Convert.ToString(reg["Usuario"]) && (txtContra.Text == Convert.ToString(reg["Password"])))
             {
@@ -45,6 +54,12 @@ namespace Sistema_Inventarios.forms
             {
                 MessageBox.Show("Datos Incorrectos!!!");
             }
+        }
+        public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
+        {
+            MemoryStream ms = new MemoryStream(byteImg);
+            System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+            return img;
         }
     }
 }

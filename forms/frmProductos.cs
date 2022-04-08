@@ -14,7 +14,7 @@ namespace Sistema_Inventarios
 {
     public partial class frmProductos : Form
     {
-
+         
         SQL sql = new SQL();
         public SqlDataAdapter bdProductos;
         public DataSet tbProductos;

@@ -13,7 +13,7 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (components != null)) 
             {
                 components.Dispose();
             }
@@ -49,49 +49,55 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 20);
+            this.label1.Size = new System.Drawing.Size(28, 19);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Id:";
+            this.label1.Text = "ID:";
             // 
             // txtId
             // 
             this.txtId.Enabled = false;
-            this.txtId.Location = new System.Drawing.Point(16, 41);
+            this.txtId.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtId.Location = new System.Drawing.Point(16, 60);
             this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(100, 26);
+            this.txtId.Size = new System.Drawing.Size(100, 27);
             this.txtId.TabIndex = 1;
             // 
             // txtNombre
             // 
-            this.txtNombre.Location = new System.Drawing.Point(145, 41);
+            this.txtNombre.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNombre.Location = new System.Drawing.Point(173, 60);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(146, 26);
+            this.txtNombre.Size = new System.Drawing.Size(146, 27);
             this.txtNombre.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(141, 9);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(169, 28);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 20);
+            this.label2.Size = new System.Drawing.Size(77, 19);
             this.label2.TabIndex = 2;
             this.label2.Text = "Nombre:";
             // 
             // txtDescuento
             // 
-            this.txtDescuento.Location = new System.Drawing.Point(328, 41);
+            this.txtDescuento.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDescuento.Location = new System.Drawing.Point(373, 60);
             this.txtDescuento.Name = "txtDescuento";
-            this.txtDescuento.Size = new System.Drawing.Size(100, 26);
+            this.txtDescuento.Size = new System.Drawing.Size(112, 27);
             this.txtDescuento.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(324, 9);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(369, 28);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 20);
+            this.label3.Size = new System.Drawing.Size(94, 19);
             this.label3.TabIndex = 4;
             this.label3.Text = "Descuento:";
             // 
@@ -105,17 +111,19 @@
             this.panel3.Controls.Add(this.btnSiguiente);
             this.panel3.Controls.Add(this.btnUltimo);
             this.panel3.Controls.Add(this.btnPrimero);
-            this.panel3.Location = new System.Drawing.Point(0, 73);
+            this.panel3.Location = new System.Drawing.Point(12, 111);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(474, 95);
+            this.panel3.Size = new System.Drawing.Size(473, 95);
             this.panel3.TabIndex = 6;
             // 
             // btnSalir
             // 
             this.btnSalir.BackColor = System.Drawing.SystemColors.Window;
+            this.btnSalir.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalir.ForeColor = System.Drawing.Color.Black;
             this.btnSalir.Location = new System.Drawing.Point(361, 52);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(87, 32);
+            this.btnSalir.Size = new System.Drawing.Size(109, 32);
             this.btnSalir.TabIndex = 7;
             this.btnSalir.Text = "Salir";
             this.btnSalir.UseVisualStyleBackColor = false;
@@ -124,9 +132,11 @@
             // btnActualizar
             // 
             this.btnActualizar.BackColor = System.Drawing.SystemColors.Window;
+            this.btnActualizar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnActualizar.ForeColor = System.Drawing.Color.Black;
             this.btnActualizar.Location = new System.Drawing.Point(361, 15);
             this.btnActualizar.Name = "btnActualizar";
-            this.btnActualizar.Size = new System.Drawing.Size(87, 32);
+            this.btnActualizar.Size = new System.Drawing.Size(109, 32);
             this.btnActualizar.TabIndex = 6;
             this.btnActualizar.Text = "A&ctualizar";
             this.btnActualizar.UseVisualStyleBackColor = false;
@@ -135,9 +145,11 @@
             // btnEliminar
             // 
             this.btnEliminar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnEliminar.Location = new System.Drawing.Point(250, 52);
+            this.btnEliminar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEliminar.ForeColor = System.Drawing.Color.Black;
+            this.btnEliminar.Location = new System.Drawing.Point(240, 52);
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(87, 32);
+            this.btnEliminar.Size = new System.Drawing.Size(105, 32);
             this.btnEliminar.TabIndex = 5;
             this.btnEliminar.Text = "&Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = false;
@@ -146,9 +158,11 @@
             // btnRegistrar
             // 
             this.btnRegistrar.BackColor = System.Drawing.SystemColors.Window;
-            this.btnRegistrar.Location = new System.Drawing.Point(250, 15);
+            this.btnRegistrar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistrar.ForeColor = System.Drawing.Color.Black;
+            this.btnRegistrar.Location = new System.Drawing.Point(240, 15);
             this.btnRegistrar.Name = "btnRegistrar";
-            this.btnRegistrar.Size = new System.Drawing.Size(87, 32);
+            this.btnRegistrar.Size = new System.Drawing.Size(105, 32);
             this.btnRegistrar.TabIndex = 4;
             this.btnRegistrar.Text = "&Registrar";
             this.btnRegistrar.UseVisualStyleBackColor = false;
@@ -157,9 +171,11 @@
             // btnAnterior
             // 
             this.btnAnterior.BackColor = System.Drawing.SystemColors.Window;
-            this.btnAnterior.Location = new System.Drawing.Point(127, 15);
+            this.btnAnterior.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAnterior.ForeColor = System.Drawing.Color.Black;
+            this.btnAnterior.Location = new System.Drawing.Point(118, 15);
             this.btnAnterior.Name = "btnAnterior";
-            this.btnAnterior.Size = new System.Drawing.Size(99, 32);
+            this.btnAnterior.Size = new System.Drawing.Size(107, 32);
             this.btnAnterior.TabIndex = 3;
             this.btnAnterior.Text = "&Anterior";
             this.btnAnterior.UseVisualStyleBackColor = false;
@@ -168,9 +184,11 @@
             // btnSiguiente
             // 
             this.btnSiguiente.BackColor = System.Drawing.SystemColors.Window;
-            this.btnSiguiente.Location = new System.Drawing.Point(127, 52);
+            this.btnSiguiente.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSiguiente.ForeColor = System.Drawing.Color.Black;
+            this.btnSiguiente.Location = new System.Drawing.Point(118, 52);
             this.btnSiguiente.Name = "btnSiguiente";
-            this.btnSiguiente.Size = new System.Drawing.Size(99, 32);
+            this.btnSiguiente.Size = new System.Drawing.Size(107, 32);
             this.btnSiguiente.TabIndex = 2;
             this.btnSiguiente.Text = "&Siguiente";
             this.btnSiguiente.UseVisualStyleBackColor = false;
@@ -179,9 +197,11 @@
             // btnUltimo
             // 
             this.btnUltimo.BackColor = System.Drawing.SystemColors.Window;
-            this.btnUltimo.Location = new System.Drawing.Point(16, 52);
+            this.btnUltimo.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUltimo.ForeColor = System.Drawing.Color.Black;
+            this.btnUltimo.Location = new System.Drawing.Point(4, 52);
             this.btnUltimo.Name = "btnUltimo";
-            this.btnUltimo.Size = new System.Drawing.Size(87, 32);
+            this.btnUltimo.Size = new System.Drawing.Size(99, 32);
             this.btnUltimo.TabIndex = 1;
             this.btnUltimo.Text = "&Ultimo";
             this.btnUltimo.UseVisualStyleBackColor = false;
@@ -190,9 +210,11 @@
             // btnPrimero
             // 
             this.btnPrimero.BackColor = System.Drawing.SystemColors.Window;
-            this.btnPrimero.Location = new System.Drawing.Point(16, 15);
+            this.btnPrimero.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrimero.ForeColor = System.Drawing.Color.Black;
+            this.btnPrimero.Location = new System.Drawing.Point(4, 15);
             this.btnPrimero.Name = "btnPrimero";
-            this.btnPrimero.Size = new System.Drawing.Size(87, 32);
+            this.btnPrimero.Size = new System.Drawing.Size(99, 32);
             this.btnPrimero.TabIndex = 0;
             this.btnPrimero.Text = "&Primero";
             this.btnPrimero.UseVisualStyleBackColor = false;
@@ -202,8 +224,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(476, 170);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.ClientSize = new System.Drawing.Size(497, 218);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.txtDescuento);
             this.Controls.Add(this.label3);
@@ -212,7 +234,10 @@
             this.Controls.Add(this.txtId);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.White;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MaximizeBox = false;
             this.Name = "frmLineaProd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Linea de Productos";
