@@ -13,10 +13,10 @@ namespace Sistema_Inventarios.forms
 {
     public partial class frmClientes : Form
     {
-        SQL sql = new SQL();
+        SQL sql = new SQL(); 
         public SqlDataAdapter bdClientes;
         public DataSet tbClientes;
-        public DataRow regClientes;
+        public DataRow regClientes; 
         string edo;
         Boolean inn = false;
         SqlCommand cmd;

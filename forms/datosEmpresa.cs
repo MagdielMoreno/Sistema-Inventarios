@@ -11,9 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sistema_Inventarios.forms
+namespace Sistema_Inventarios.forms 
 {
-    public partial class datosEmpresa : Form
+    public partial class datosEmpresa : Form 
     {
         SQL sql = new SQL();
         string edo;

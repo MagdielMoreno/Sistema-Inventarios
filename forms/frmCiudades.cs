@@ -11,11 +11,11 @@ using System.Data.SqlClient;
 
 namespace Sistema_Inventarios
 {
-    public partial class frmCiudades : Form
+    public partial class frmCiudades : Form 
     {
         public frmCiudades()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         public SqlDataAdapter BDControl, BDCiudades;

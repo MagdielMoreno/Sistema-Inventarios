@@ -11,11 +11,11 @@ using System.Data.SqlClient;
  
 namespace Sistema_Inventarios 
 {
-    public partial class frmEstados : Form
+    public partial class frmEstados : Form 
     {
         public frmEstados()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         public SqlDataAdapter BDControl, BDCiudades;
@@ -167,6 +167,16 @@ namespace Sistema_Inventarios
             cmd.CommandText = "UPDATE Estados SET Nombre='" + TxtNombre.Text + "' WHERE Id=" + TxtId.Text;
             cmd.ExecuteNonQuery();
             MessageBox.Show("Registro Actualizado");
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
 
         public DataRow Registro, RegCiu;
