@@ -15,7 +15,7 @@ namespace Sistema_Inventarios
     public partial class frmProductos : Form
     {
          
-        SQL sql = new SQL();
+        SQL sql = new SQL(); 
         public SqlDataAdapter bdProductos;
         public DataSet tbProductos;
         public DataRow regProductos;
@@ -123,7 +123,7 @@ namespace Sistema_Inventarios
                 if (btnRegistrar.Text == "Registrar")
                 {
                     SqlCommand cmd = new SqlCommand("INSERT INTO Productos (NombreCorto, Descripcion, Linea, Costo, Precio_1, Precio_2, Precio_3, Descuento, Proveedor, Existencia, Ubicacion, CantMax, CantMin, CantReorden, Caducidad, ValorAgregado) " +
-                        "VALUES ('','',1,0,0,0,0,0,13,0,'',0,0,0,getDate(),''); SELECT SCOPE_IDENTITY()", sql.connect());
+                        "VALUES ('','',1,0,0,0,0,0,1,0,'',0,0,0,getDate(),''); SELECT SCOPE_IDENTITY()", sql.connect());
                     int id = Convert.ToInt32(cmd.ExecuteScalar());
                     btnPrimero.Enabled = false;
                     btnUltimo.Enabled = false;
@@ -155,7 +155,7 @@ namespace Sistema_Inventarios
                 {
                     if (txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null || txtDescuento.Text == "" || txtExistencia.Text == "" || txtUbicacion.Text == "" || txtCant1.Text == "" || txtCant2.Text == "" || txtCant3.Text == "")
                     {
-                        MessageBox.Show("LLena todos los campos");
+                        MessageBox.Show("LLena todos los campos.");
                     }
                     else
                     {
@@ -242,7 +242,7 @@ namespace Sistema_Inventarios
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Error en el tipo de datos.");
             }
         }
 
@@ -252,7 +252,7 @@ namespace Sistema_Inventarios
             {
                 if (txtId.Text == "")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    MessageBox.Show("LLena todos los campos.");
                 }
                 else
                 {
@@ -314,7 +314,7 @@ namespace Sistema_Inventarios
             {
                 if (txtId.Text == "" || txtNombre.Text == "" || txtDescripcion.Text == "" || txtCosto.Text == "" || txtPrecio1.Text == "" || txtPrecio2.Text == "" || txtPrecio3.Text == "" || imgProducto.Image == null || txtDescuento.Text == "" || txtExistencia.Text == "" || txtUbicacion.Text == "" || txtCant1.Text == "" || txtCant2.Text == "" || txtCant3.Text == "")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    MessageBox.Show("LLena todos los campos.");
                 }
                 else
                 {
@@ -402,7 +402,7 @@ namespace Sistema_Inventarios
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Error en el tipo de datos.");
             }
         }
 
@@ -413,8 +413,15 @@ namespace Sistema_Inventarios
 
         private void btnUltimo_Click(object sender, EventArgs e)
         {
-            pos = BindingContext[tbProductos, "Productos"].Count - 1;
-            showData();
+            try
+            {
+                pos = BindingContext[tbProductos, "Productos"].Count - 1;
+                showData();
+            }
+            catch(Exception ex) 
+            { 
+                MessageBox.Show(ex.ToString()); 
+            }
         }
 
         private void btnAnterior_Click(object sender, EventArgs e)

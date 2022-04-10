@@ -18,7 +18,7 @@ namespace Sistema_Inventarios.forms
 
         public inicioSesion()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         } 
       
         private void Login_Load(object sender, EventArgs e)

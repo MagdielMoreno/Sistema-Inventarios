@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
-        {
+        { 
             if (disposing && (components != null)) 
             {
                 components.Dispose();
@@ -173,9 +173,9 @@
             this.btnAnterior.BackColor = System.Drawing.SystemColors.Window;
             this.btnAnterior.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAnterior.ForeColor = System.Drawing.Color.Black;
-            this.btnAnterior.Location = new System.Drawing.Point(118, 15);
+            this.btnAnterior.Location = new System.Drawing.Point(5, 52);
             this.btnAnterior.Name = "btnAnterior";
-            this.btnAnterior.Size = new System.Drawing.Size(107, 32);
+            this.btnAnterior.Size = new System.Drawing.Size(99, 32);
             this.btnAnterior.TabIndex = 3;
             this.btnAnterior.Text = "&Anterior";
             this.btnAnterior.UseVisualStyleBackColor = false;
@@ -199,9 +199,9 @@
             this.btnUltimo.BackColor = System.Drawing.SystemColors.Window;
             this.btnUltimo.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUltimo.ForeColor = System.Drawing.Color.Black;
-            this.btnUltimo.Location = new System.Drawing.Point(4, 52);
+            this.btnUltimo.Location = new System.Drawing.Point(118, 14);
             this.btnUltimo.Name = "btnUltimo";
-            this.btnUltimo.Size = new System.Drawing.Size(99, 32);
+            this.btnUltimo.Size = new System.Drawing.Size(107, 32);
             this.btnUltimo.TabIndex = 1;
             this.btnUltimo.Text = "&Ultimo";
             this.btnUltimo.UseVisualStyleBackColor = false;

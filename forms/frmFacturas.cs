@@ -13,10 +13,9 @@ using System.Net.Mail;
 using System.Net;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
-//Test push
 namespace Sistema_Inventarios
 {
-    public partial class frmFacturas : Form
+    public partial class frmFacturas : Form 
     {
         SQL sql = new SQL();
         public SqlDataAdapter bdFacturas, bdProdFact, bdClientes, bdProd, bdControl;
@@ -210,68 +209,81 @@ namespace Sistema_Inventarios
         }
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
-            string queryComm = "SELECT * FROM Control";
-            SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
-            SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
-            DataSet tbControl = new DataSet();
-            dbControl.Fill(tbControl, "Control");
-            DataRow reg = tbControl.Tables["Control"].Rows[0]; 
-            byte[] byteImg = ((byte[])reg["Logo"]);
-            Image img = ByteArrayToImage(byteImg);
-            Bitmap imgbitmap = new Bitmap(img);
-            Image resizedImage = resizeImage(imgbitmap, 100, 100);
-            //Datos Factura 
-            e.Graphics.DrawImage(resizedImage, new Point(50, 30));
-            e.Graphics.DrawString("Factura No. " + txtFolio.Text, new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 150));
-            e.Graphics.DrawString("Fecha: ", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 170));
-            e.Graphics.DrawString(dtpFecha.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 190));
-            e.Graphics.DrawString("Cliente: " + cboCliente.Text, new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 150));
-            e.Graphics.DrawString(txtDatosPersonales.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 170));
-            if (rdbContado.Checked)
-                e.Graphics.DrawString("CONTADO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 210));
-            else
-                e.Graphics.DrawString("CREDITO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 210));
-            e.Graphics.DrawString("Observaciones:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 240));
-            e.Graphics.DrawString(txtObservaciones.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 260));
-            e.Graphics.DrawRectangle(Pens.Black, 40, 20, 780, 280);
-            //Datos Productos
-            int i = 300;
-            e.Graphics.DrawString("Clave", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, i + 20));
-            e.Graphics.DrawString("Producto", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(150, i + 20));
-            e.Graphics.DrawString("Cantidad", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(400, i + 20));
-            e.Graphics.DrawString("Descuento", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(500, i + 20));
-            e.Graphics.DrawString("Precio", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(620, i + 20));
-            e.Graphics.DrawString("Importe", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(700, i + 20));
-            i += 20;
-            foreach (DataGridViewRow row in dgvProductos.Rows)
+            try
             {
-                e.Graphics.DrawString(row.Cells["Clave"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, i + 20));
-                e.Graphics.DrawString(row.Cells["Descripcion"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(150, i + 20));
-                e.Graphics.DrawString(row.Cells["Cantidad"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(400, i + 20));
-                e.Graphics.DrawString(row.Cells["Descuento"].Value.ToString() + "%", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(500, i + 20));
-                e.Graphics.DrawString("$" + row.Cells["Precio"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(620, i + 20));
-                e.Graphics.DrawString("$" + row.Cells["Importe"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(700, i + 20));
-                i += 20; 
-                e.Graphics.DrawRectangle(Pens.Black, 40, i + 20, 780, (float)0.5);
+                string queryComm = "SELECT * FROM Control";
+                SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
+                SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
+                DataSet tbControl = new DataSet();
+                dbControl.Fill(tbControl, "Control");
+                DataRow reg = tbControl.Tables["Control"].Rows[0];
+                byte[] byteImg = ((byte[])reg["Logo"]);
+                Image img = ByteArrayToImage(byteImg);
+                Bitmap imgbitmap = new Bitmap(img);
+                Image resizedImage = resizeImage(imgbitmap, 100, 100);
+                //Datos Factura 
+                e.Graphics.DrawImage(resizedImage, new Point(50, 30));
+                e.Graphics.DrawString("Factura No. " + txtFolio.Text, new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 150));
+                e.Graphics.DrawString("Fecha: ", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 170));
+                e.Graphics.DrawString(dtpFecha.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 190));
+                e.Graphics.DrawString("Cliente: " + cboCliente.Text, new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 150));
+                e.Graphics.DrawString(txtDatosPersonales.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, 170));
+                if (rdbContado.Checked)
+                    e.Graphics.DrawString("CONTADO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 210));
+                else
+                    e.Graphics.DrawString("CREDITO", new Font("Arial Black", 14, FontStyle.Regular), Brushes.Black, new Point(600, 210));
+                e.Graphics.DrawString("Observaciones:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(600, 240));
+                e.Graphics.DrawString(txtObservaciones.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(600, 260));
+                e.Graphics.DrawRectangle(Pens.Black, 40, 20, 780, 280);
+                //Datos Productos
+                int i = 300;
+                e.Graphics.DrawString("Clave", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, i + 20));
+                e.Graphics.DrawString("Producto", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(150, i + 20));
+                e.Graphics.DrawString("Cantidad", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(400, i + 20));
+                e.Graphics.DrawString("Descuento", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(500, i + 20));
+                e.Graphics.DrawString("Precio", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(620, i + 20));
+                e.Graphics.DrawString("Importe", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(700, i + 20));
+                i += 20;
+                foreach (DataGridViewRow row in dgvProductos.Rows)
+                {
+                    e.Graphics.DrawString(row.Cells["Clave"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(50, i + 20));
+                    e.Graphics.DrawString(row.Cells["Descripcion"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(150, i + 20));
+                    e.Graphics.DrawString(row.Cells["Cantidad"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(400, i + 20));
+                    e.Graphics.DrawString(row.Cells["Descuento"].Value.ToString() + "%", new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(500, i + 20));
+                    e.Graphics.DrawString("$" + row.Cells["Precio"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(620, i + 20));
+                    e.Graphics.DrawString("$" + row.Cells["Importe"].Value.ToString(), new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(700, i + 20));
+                    i += 20;
+                    e.Graphics.DrawRectangle(Pens.Black, 40, i + 20, 780, (float)0.5);
+                }
+                //Totales
+                StringFormat sf1 = new StringFormat();
+                sf1.Alignment = StringAlignment.Near;
+                sf1.LineAlignment = StringAlignment.Near;
+                StringFormat sf2 = new StringFormat();
+                sf2.Alignment = StringAlignment.Far;
+                sf2.LineAlignment = StringAlignment.Far;
+                e.Graphics.DrawRectangle(Pens.Black, 40, 320, 780, 620);
+                e.Graphics.DrawString("Subtotal:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 980), sf1);
+                e.Graphics.DrawString("$" + txtSubtotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1000), sf2);
+                e.Graphics.DrawString("Descuento:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1000), sf1);
+                e.Graphics.DrawString("$" + txtDescuento.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1020), sf2);
+                e.Graphics.DrawString("IVA:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1020), sf1);
+                e.Graphics.DrawString("$" + txtIva.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1040), sf2);
+                e.Graphics.DrawString("Total:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1040), sf1);
+                e.Graphics.DrawString("$" + txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
+                e.Graphics.DrawRectangle(Pens.Black, 40, 960, 780, 120);
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
-            //Totales
-            StringFormat sf1 = new StringFormat();
-            sf1.Alignment = StringAlignment.Near;
-            sf1.LineAlignment = StringAlignment.Near;
-            StringFormat sf2 = new StringFormat();
-            sf2.Alignment = StringAlignment.Far;
-            sf2.LineAlignment = StringAlignment.Far;
-            e.Graphics.DrawRectangle(Pens.Black, 40, 320, 780, 620);
-            e.Graphics.DrawString("Subtotal:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 980), sf1);
-            e.Graphics.DrawString("$" + txtSubtotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1000), sf2);
-            e.Graphics.DrawString("Descuento:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1000), sf1);
-            e.Graphics.DrawString("$"+ txtDescuento.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1020), sf2);
-            e.Graphics.DrawString("IVA:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1020), sf1);
-            e.Graphics.DrawString("$" + txtIva.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1040), sf2);
-            e.Graphics.DrawString("Total:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1040), sf1);
-            e.Graphics.DrawString("$" + txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
-            e.Graphics.DrawRectangle(Pens.Black, 40, 960, 780, 120);
         }
+
+        private void btnModificarProd_Click(object sender, EventArgs e)
+        {
+            cboProdFact.Focus();
+            cboProdFact.DroppedDown = true;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             SqlCommand cmd = new SqlCommand("INSERT INTO FacturasVtas VALUES ("+Convert.ToInt16(regClientes["Id"])+",getDate(),'',1,1,0,0,0); SELECT SCOPE_IDENTITY()", sql.connect());
@@ -294,6 +306,7 @@ namespace Sistema_Inventarios
         {
             cboCliente.Enabled = true;
             cboCliente.Focus();
+            cboCliente.DroppedDown = true;
             cboCliente.SelectedIndex = -1;
             txtDatosPersonales.Text = "";
             txtObservaciones.Text = "";
@@ -324,6 +337,8 @@ namespace Sistema_Inventarios
             dgvProductos.Rows.Add();
             dgvProductos.ClearSelection();
             dgvProductos.CurrentCell = dgvProductos.Rows[dgvProductos.Rows.Count - 1].Cells[0];
+            cboProdFact.Focus();
+            cboProdFact.DroppedDown = true;
         }
 
         private void frmFacturas_Load(object sender, EventArgs e)
@@ -372,6 +387,7 @@ namespace Sistema_Inventarios
             txtObservaciones.ReadOnly = false;
             dgvProductos.Rows.Add();
             cboProdFact.Focus();
+            cboProdFact.DroppedDown = true;
         }
 
         public frmFacturas()

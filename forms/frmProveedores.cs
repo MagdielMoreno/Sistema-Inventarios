@@ -16,7 +16,7 @@ namespace Sistema_Inventarios
         public SqlDataAdapter bdProveedores;
         public DataSet tbProveedores;
         public DataRow regProveedores;
-        SQL sql = new SQL(); 
+        SQL sql = new SQL();  
          
         string edo;
 
@@ -129,7 +129,7 @@ namespace Sistema_Inventarios
                 {
                     if (txtNombre.Text == "" || txtDomicilio.Text == "" || CboEstado.Text == "" || CboCiudad.Text == "" || txtCP.Text == "" || txtTelefono.Text == "" || txtCorreo.Text == "" || txtRFC.Text == "" || txtNombreC.Text == "" || txtContacto.Text == "")
                     {
-                        MessageBox.Show("LLena todos los campos");
+                        MessageBox.Show("LLena todos los campos.");
                     }
                     else
                     {
@@ -175,8 +175,8 @@ namespace Sistema_Inventarios
                         cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
                         cmd.Parameters.AddWithValue("@Estado", idedo);
                         cmd.Parameters.AddWithValue("@Ciudad", idcd);
-                        cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
-                        cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
+                        cmd.Parameters.AddWithValue("@CodigoPostal", int.Parse(txtCP.Text));
+                        cmd.Parameters.AddWithValue("@Telefono", Int64.Parse(txtTelefono.Text));
                         cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
                         cmd.Parameters.AddWithValue("@RFC", txtRFC.Text);
                         cmd.Parameters.AddWithValue("@NombreC", txtNombreC.Text);
@@ -199,7 +199,7 @@ namespace Sistema_Inventarios
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Error en el tipo de datos.");
             }
         }
 
@@ -209,7 +209,7 @@ namespace Sistema_Inventarios
             {
                 if (txtId.Text == "")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    MessageBox.Show("LLena todos los campos.");
                 }
                 else
                 {
@@ -250,7 +250,7 @@ namespace Sistema_Inventarios
             {
                 if (txtNombre.Text == "" || txtDomicilio.Text == "" || CboEstado.Text == "" || CboCiudad.Text == "" || txtCP.Text == "" || txtTelefono.Text == "" || txtCorreo.Text == "" || txtRFC.Text == "" || txtNombreC.Text == "" || txtContacto.Text == "" || txtId.Text == "")
                 {
-                    MessageBox.Show("LLena todos los campos");
+                    MessageBox.Show("LLena todos los campos.");
                 }
                 else
                 {
@@ -302,8 +302,8 @@ namespace Sistema_Inventarios
                         cmd.Parameters.AddWithValue("@Domicilio", txtDomicilio.Text);
                         cmd.Parameters.AddWithValue("@Estado", idedo);
                         cmd.Parameters.AddWithValue("@Ciudad", idcd);
-                        cmd.Parameters.AddWithValue("@CodigoPostal", txtCP.Text);
-                        cmd.Parameters.AddWithValue("@Telefono", int.Parse(txtTelefono.Text));
+                        cmd.Parameters.AddWithValue("@CodigoPostal", int.Parse(txtCP.Text));
+                        cmd.Parameters.AddWithValue("@Telefono", Int64.Parse(txtTelefono.Text));
                         cmd.Parameters.AddWithValue("@Correo", txtCorreo.Text);
                         cmd.Parameters.AddWithValue("@RFC", txtRFC.Text);
                         cmd.Parameters.AddWithValue("@NombreC", txtNombreC.Text);
@@ -322,7 +322,7 @@ namespace Sistema_Inventarios
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show("Error en el tipo de datos.");
             }
         }
         
@@ -334,8 +334,16 @@ namespace Sistema_Inventarios
 
         private void btnUltimo_Click(object sender, EventArgs e)
         {
-            pos = BindingContext[tbProveedores, "Proveedores"].Count - 1;
-            showData();
+            try
+            {
+                pos = BindingContext[tbProveedores, "Proveedores"].Count - 1;
+                showData();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
         }
         private void btnAnterior_Click(object sender, EventArgs e)
         {
@@ -351,53 +359,60 @@ namespace Sistema_Inventarios
         int pos = 0;
         public void showData()
         {
-            SqlCommand cmd = new SqlCommand("SELECT dbo.Proveedores.Id, dbo.Proveedores.Nombre, dbo.Proveedores.Domicilio, " +
+            try
+            {
+                SqlCommand cmd = new SqlCommand("SELECT dbo.Proveedores.Id, dbo.Proveedores.Nombre, dbo.Proveedores.Domicilio, " +
                 "dbo.Proveedores.CodigoPostal, dbo.Proveedores.Telefono, dbo.Proveedores.Correo, dbo.Proveedores.RFC, " +
                 "dbo.Proveedores.NombreComercial, dbo.Proveedores.Contacto, Ciudades.Nombre AS Ciudad, Estados.Nombre AS Estado " +
-                "FROM dbo.Proveedores INNER JOIN " + 
+                "FROM dbo.Proveedores INNER JOIN " +
                 "Ciudades ON Proveedores.Ciudad = Ciudades.Id INNER JOIN " +
                 "Estados ON Proveedores.Estado = Estados.Id AND Ciudades.IdEdo = Estados.Id", sql.connect());
-            bdProveedores = new SqlDataAdapter(cmd);
-            tbProveedores = new DataSet();
-            bdProveedores.Fill(tbProveedores, "Proveedores");
-            if (pos >= BindingContext[tbProveedores, "Proveedores"].Count)
-            {
-                pos -= 1;
-            }
-            else if (pos <= 0)
-            {
-                pos = 0;
-            }
-            
-            BindingContext[tbProveedores, "Proveedores"].Position = pos;
-            regProveedores = tbProveedores.Tables["Proveedores"].Rows[pos];
-            txtId.Text = Convert.ToString(regProveedores["Id"]);
-            txtNombre.Text = Convert.ToString(regProveedores["Nombre"]);
-            txtDomicilio.Text = Convert.ToString(regProveedores["Domicilio"]);
-            txtCP.Text = Convert.ToString(regProveedores["CodigoPostal"]);
-            txtTelefono.Text = Convert.ToString(regProveedores["Telefono"]);
-            txtCorreo.Text = Convert.ToString(regProveedores["Correo"]);
-            txtRFC.Text = Convert.ToString(regProveedores["RFC"]);
-            txtNombreC.Text = Convert.ToString(regProveedores["NombreComercial"]);
-            txtContacto.Text = Convert.ToString(regProveedores["Contacto"]);
-            
-            CboCiudad.SelectedItem = Convert.ToString(regProveedores["Ciudad"]);
-            CboEstado.SelectedItem = Convert.ToString(regProveedores["Estado"]);
-            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
-            DataTable tbEstados = new DataTable();
-            estados.Fill(tbEstados);
-            CboEstado.Items.Clear();
-            for (int m = 0; m < tbEstados.Rows.Count; m++)
-            {
-                CboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
-                if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(regProveedores["Estado"]))
+                bdProveedores = new SqlDataAdapter(cmd);
+                tbProveedores = new DataSet();
+                bdProveedores.Fill(tbProveedores, "Proveedores");
+                if (pos >= BindingContext[tbProveedores, "Proveedores"].Count)
                 {
-                    edo = tbEstados.Rows[m]["Nombre"].ToString();
+                    pos -= 1;
                 }
+                else if (pos <= 0)
+                {
+                    pos = 0;
+                }
+
+                BindingContext[tbProveedores, "Proveedores"].Position = pos;
+                regProveedores = tbProveedores.Tables["Proveedores"].Rows[pos];
+                txtId.Text = Convert.ToString(regProveedores["Id"]);
+                txtNombre.Text = Convert.ToString(regProveedores["Nombre"]);
+                txtDomicilio.Text = Convert.ToString(regProveedores["Domicilio"]);
+                txtCP.Text = Convert.ToString(regProveedores["CodigoPostal"]);
+                txtTelefono.Text = Convert.ToString(regProveedores["Telefono"]);
+                txtCorreo.Text = Convert.ToString(regProveedores["Correo"]);
+                txtRFC.Text = Convert.ToString(regProveedores["RFC"]);
+                txtNombreC.Text = Convert.ToString(regProveedores["NombreComercial"]);
+                txtContacto.Text = Convert.ToString(regProveedores["Contacto"]);
+
+                CboCiudad.SelectedItem = Convert.ToString(regProveedores["Ciudad"]);
+                CboEstado.SelectedItem = Convert.ToString(regProveedores["Estado"]);
+                SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                DataTable tbEstados = new DataTable();
+                estados.Fill(tbEstados);
+                CboEstado.Items.Clear();
+                for (int m = 0; m < tbEstados.Rows.Count; m++)
+                {
+                    CboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
+                    if (Convert.ToString(tbEstados.Rows[m]["Nombre"]) == Convert.ToString(regProveedores["Estado"]))
+                    {
+                        edo = tbEstados.Rows[m]["Nombre"].ToString();
+                    }
+                }
+                CboEstado.SelectedItem = edo;
+                LlenarCboCiudades();
+                updateCiudad();
             }
-            CboEstado.SelectedItem = edo;
-            LlenarCboCiudades();
-            updateCiudad();
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }    
         }
         SqlDataAdapter ciudades;
         DataTable tbCiudades;

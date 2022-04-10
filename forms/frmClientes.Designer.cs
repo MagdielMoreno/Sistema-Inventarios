@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
-        {
+        { 
             if (disposing && (components != null))
             { 
                 components.Dispose();
@@ -379,6 +379,7 @@
             // 
             this.txtCp.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCp.Location = new System.Drawing.Point(295, 176);
+            this.txtCp.MaxLength = 5;
             this.txtCp.Name = "txtCp";
             this.txtCp.Size = new System.Drawing.Size(210, 27);
             this.txtCp.TabIndex = 25;
@@ -387,6 +388,7 @@
             // 
             this.txtRfc.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtRfc.Location = new System.Drawing.Point(295, 242);
+            this.txtRfc.MaxLength = 13;
             this.txtRfc.Name = "txtRfc";
             this.txtRfc.Size = new System.Drawing.Size(210, 27);
             this.txtRfc.TabIndex = 26;
@@ -422,6 +424,7 @@
             // 
             this.txtTelefono.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTelefono.Location = new System.Drawing.Point(578, 120);
+            this.txtTelefono.MaxLength = 10;
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(214, 27);
             this.txtTelefono.TabIndex = 30;
