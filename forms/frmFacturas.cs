@@ -100,7 +100,7 @@ namespace Sistema_Inventarios
             else
             {
                 string query1 = "INSERT INTO FacturasVtas VALUES(" +
-                    "@Id," +
+                    "@Folio," +
                     "@Cliente," +
                     "@Fecha," +
                     "@Observacion," +
@@ -111,19 +111,15 @@ namespace Sistema_Inventarios
                     "@Timbrado)";
                 SqlCommand cmd1 = new SqlCommand(query1, sql.getConn());
                 cmd1.Parameters.Clear();
-                cmd1.Parameters.AddWithValue("@Id", Convert.ToInt32(txtFolio.Text));
+                cmd1.Parameters.AddWithValue("@Folio", Convert.ToInt32(txtFolio.Text));
                 cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
                 cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
                 cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
                 cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
                 if (rdbContado.Checked)
-                {
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
-                }
                 else
-                {
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
-                }
                 cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
@@ -175,10 +171,13 @@ namespace Sistema_Inventarios
                 tbControl.Clear();
                 bdControl.Fill(tbControl, "Control");
                 regControl = tbControl.Tables["Control"].Rows[0];
+
                 PrintPreviewDialog ppd = new PrintPreviewDialog();
                 ppd.Document = printDocument1;
                 ((Form)ppd).WindowState = FormWindowState.Maximized;
                 ppd.ShowDialog();
+
+                printDocument1.PrinterSettings.PrinterName = "Microsoft Print to PDF";
             } 
         }  
         public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
