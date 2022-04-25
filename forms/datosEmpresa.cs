@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text; 
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,45 +35,53 @@ namespace Sistema_Inventarios.forms
 
         private void showData()
         {
-            string queryComm = "SELECT * FROM Control";
-            SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
-            SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
-            DataSet tbControl = new DataSet();
-            dbControl.Fill(tbControl, "Control");
-            DataRow reg = tbControl.Tables["Control"].Rows[0];
-            txtNombre.Text = Convert.ToString(reg["NombreEmpresa"]);
-            txtDomicilio.Text = Convert.ToString(reg["Domicilio"]);
-            txtRFC.Text = Convert.ToString(reg["RFC"]);
-            txtTelefono.Text = Convert.ToString(reg["Telefono"]);
-            txtCp.Text = Convert.ToString(reg["CodigoPostal"]);
-            txtCorreo.Text = Convert.ToString(reg["Correo"]);
-            txtFactCred.Text = Convert.ToString(reg["FolioVtasCredito"]);
-            txtFactCont.Text = Convert.ToString(reg["FolioVtasContado"]);
-            txtRemision.Text = Convert.ToString(reg["FolioVtasRemision"]);
-            txtFactComp.Text = Convert.ToString(reg["FolioCompras"]);
-            txtCotizacion.Text = Convert.ToString(reg["FolioCotizacion"]);
-            txtUsuario.Text = Convert.ToString(reg["Usuario"]);
-            txtClave.Text = Convert.ToString(reg["Password"]);
-            txtIva.Text = Convert.ToString(reg["IVA"]);
-            edo = Convert.ToString(reg["Estado"]);
-            cd = Convert.ToString(reg["Ciudad"]);
-            byte[] byteImg = ((byte[])reg["Logo"]);
-            pctLogo.Image = ByteArrayToImage(byteImg);
-            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
-            DataTable tbEstados = new DataTable();
-            estados.Fill(tbEstados);
-            for (int m = 0; m < tbEstados.Rows.Count; m++)
+            try
             {
-                cboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
-                if (Convert.ToString(tbEstados.Rows[m]["Id"]) == Convert.ToString(reg["Estado"]))
+                string queryComm = "SELECT * FROM Control";
+                SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
+                SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
+                DataSet tbControl = new DataSet();
+                dbControl.Fill(tbControl, "Control");
+                DataRow reg = tbControl.Tables["Control"].Rows[0];
+                txtNombre.Text = Convert.ToString(reg["NombreEmpresa"]);
+                txtDomicilio.Text = Convert.ToString(reg["Domicilio"]);
+                txtRFC.Text = Convert.ToString(reg["RFC"]);
+                txtTelefono.Text = Convert.ToString(reg["Telefono"]);
+                txtCp.Text = Convert.ToString(reg["CodigoPostal"]);
+                txtCorreo.Text = Convert.ToString(reg["Correo"]);
+                txtFactCred.Text = Convert.ToString(reg["FolioVtasCredito"]);
+                txtFactCont.Text = Convert.ToString(reg["FolioVtasContado"]);
+                txtRemision.Text = Convert.ToString(reg["FolioVtasRemision"]);
+                txtFactComp.Text = Convert.ToString(reg["FolioCompras"]);
+                txtCotizacion.Text = Convert.ToString(reg["FolioCotizacion"]);
+                txtUsuario.Text = Convert.ToString(reg["Usuario"]);
+                txtClave.Text = Convert.ToString(reg["Password"]);
+                txtIva.Text = Convert.ToString(reg["IVA"]);
+                edo = Convert.ToString(reg["Estado"]);
+                cd = Convert.ToString(reg["Ciudad"]);
+                byte[] byteImg = ((byte[])reg["Logo"]);
+                pctLogo.Image = ByteArrayToImage(byteImg);
+                SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                DataTable tbEstados = new DataTable();
+                estados.Fill(tbEstados);
+                for (int m = 0; m < tbEstados.Rows.Count; m++)
                 {
-                    edo = tbEstados.Rows[m]["Nombre"].ToString();
+                    cboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
+                    if (Convert.ToString(tbEstados.Rows[m]["Id"]) == Convert.ToString(reg["Estado"]))
+                    {
+                        edo = tbEstados.Rows[m]["Nombre"].ToString();
+                    }
                 }
-            }
-            cboEstado.SelectedItem = edo;
-            updateCiudad();
+                cboEstado.SelectedItem = edo;
+                updateCiudad();
 
-            txtNombre.Select();
+                txtNombre.Select();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
         }
         
         public void updateCiudad()
@@ -141,67 +149,75 @@ namespace Sistema_Inventarios.forms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd = sql.getConn().CreateCommand();
-            int idEdo = 0;
-            int idCd = 0;
-
-            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
-            DataTable tbEstados = new DataTable();
-            estados.Fill(tbEstados);
-            for (int m = 0; m < tbEstados.Rows.Count; m++)
+            if (txtNombre.Text == "" || txtDomicilio.Text == "" || cboEstado.Text == "" || cboCiudad.Text == "" || txtCp.Text == "" || txtRFC.Text == "" || txtTelefono.Text == "" || txtCorreo.Text == "" 
+                || txtFactComp.Text == "" || txtFactCont.Text == "" || txtFactCred.Text == "" || txtRemision.Text == "" || txtCotizacion.Text == "" || txtIva.Text == "" || txtUsuario.Text == "" || txtClave.Text == "")
             {
-                if (Convert.ToString(cboEstado.SelectedItem) == tbEstados.Rows[m]["Nombre"].ToString())
+                MessageBox.Show("Llena todos los campos.");
+            }
+            else
+            {
+                try
                 {
-                    idEdo = Convert.ToInt16(tbEstados.Rows[m]["Id"]);
+                    SqlCommand cmd = sql.getConn().CreateCommand();
+                    int idEdo = 0;
+                    int idCd = 0;
+
+                    SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+                    DataTable tbEstados = new DataTable();
+                    estados.Fill(tbEstados);
+                    for (int m = 0; m < tbEstados.Rows.Count; m++)
+                    {
+                        if (Convert.ToString(cboEstado.SelectedItem) == tbEstados.Rows[m]["Nombre"].ToString())
+                        {
+                            idEdo = Convert.ToInt16(tbEstados.Rows[m]["Id"]);
+                        }
+                    }
+                    ciudades = new SqlDataAdapter("SELECT C.Nombre, C.Id FROM Estados E INNER JOIN Ciudades C ON E.Id = C.IdEdo WHERE E.Nombre = '" + Convert.ToString(edo) + "';", sql.getConn());
+                    tbCiudades = new DataTable();
+                    ciudades.Fill(tbCiudades);
+                    for (int m = 0; m < tbCiudades.Rows.Count; m++)
+                    {
+                        if (Convert.ToString(cboCiudad.SelectedItem) == tbCiudades.Rows[m]["Nombre"].ToString())
+                        {
+                            idCd = Convert.ToInt16(tbCiudades.Rows[m]["Id"]);
+                        }
+                    }
+                    sql.getConn().Open();
+                    cmd.CommandText = "UPDATE Control SET " +
+                                     "NombreEmpresa='" + txtNombre.Text + "'," +
+                                     "Domicilio='" + txtDomicilio.Text + "'," +
+                                     "RFC='" + txtRFC.Text + "'," +
+                                     "Telefono='" + txtTelefono.Text + "'," +
+                                     "CodigoPostal='" + txtCp.Text + "'," +
+                                     "Correo='" + txtCorreo.Text + "'," +
+                                     "FolioVtasCredito=" + txtFactCred.Text + "," +
+                                     "FolioVtasContado=" + txtFactCont.Text + "," +
+                                     "FolioVtasRemision=" + txtRemision.Text + "," +
+                                     "FolioCompras=" + txtFactComp.Text + "," +
+                                     "FolioCotizacion=" + txtCotizacion.Text + "," +
+                                     "Usuario='" + txtUsuario.Text + "'," +
+                                     "Password='" + txtClave.Text + "'," +
+                                     "IVA='" + txtIva.Text + "'";
+                    cmd.ExecuteNonQuery();
+
+                    byte[] byteLogo = ImageToByteArray(pctLogo.Image);
+                    string query = "Update Control SET Logo = @Logo";
+                    SqlCommand cmdLogo = new SqlCommand(query, sql.getConn());
+                    cmdLogo.Parameters.AddWithValue("@Logo", byteLogo);
+                    cmdLogo.ExecuteNonQuery();
+
+                    cmd.CommandText = "UPDATE Control SET " +
+                                    "Estado=" + idEdo + "," +
+                                    "Ciudad=" + idCd;
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Guardado Correctamente");
+                    sql.getConn().Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
                 }
             }
-            ciudades = new SqlDataAdapter("SELECT C.Nombre, C.Id FROM Estados E INNER JOIN Ciudades C ON E.Id = C.IdEdo WHERE E.Nombre = '" + Convert.ToString(edo) + "';", sql.getConn());
-            tbCiudades = new DataTable();
-            ciudades.Fill(tbCiudades);
-            for (int m = 0; m < tbCiudades.Rows.Count; m++)
-            {
-                if (Convert.ToString(cboCiudad.SelectedItem) == tbCiudades.Rows[m]["Nombre"].ToString())
-                {
-                    idCd = Convert.ToInt16(tbCiudades.Rows[m]["Id"]);
-                }
-            }
-            sql.getConn().Open();
-            try
-            {
-                cmd.CommandText = "UPDATE Control SET " +
-                                "NombreEmpresa='" + txtNombre.Text + "'," +
-                                "Domicilio='" + txtDomicilio.Text + "'," +
-                                "RFC='" + txtRFC.Text + "'," +
-                                "Telefono='" + txtTelefono.Text + "'," +
-                                "CodigoPostal='" + txtCp.Text + "'," +
-                                "Correo='" + txtCorreo.Text + "'," +
-                                "FolioVtasCredito=" + txtFactCred.Text + "," +
-                                "FolioVtasContado=" + txtFactCont.Text + "," +
-                                "FolioVtasRemision=" + txtRemision.Text + "," +
-                                "FolioCompras=" + txtFactComp.Text + "," +
-                                "FolioCotizacion=" + txtCotizacion.Text + "," +
-                                "Usuario='" + txtUsuario.Text + "'," +
-                                "Password='" + txtClave.Text + "'," +
-                                "IVA='" + txtIva.Text + "'";
-                cmd.ExecuteNonQuery();
-
-                byte[] byteLogo = ImageToByteArray(pctLogo.Image);
-                string query = "Update Control SET Logo = @Logo";
-                SqlCommand cmdLogo = new SqlCommand(query, sql.getConn());
-                cmdLogo.Parameters.AddWithValue("@Logo", byteLogo);
-                cmdLogo.ExecuteNonQuery();
-
-                cmd.CommandText = "UPDATE Control SET " +
-                                "Estado=" + idEdo + "," +
-                                "Ciudad=" + idCd;
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Guardado Correctamente");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.ToString());
-            }
-            sql.getConn().Close();
         }
 
         public byte[] ImageToByteArray(System.Drawing.Image img)

@@ -8,7 +8,7 @@
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Clean up any resources being used.
+        /// Clean up any resources being used. 
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -52,9 +52,9 @@
             this.label1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(24, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 19);
+            this.label1.Size = new System.Drawing.Size(28, 19);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Clave:";
+            this.label1.Text = "ID:";
             // 
             // TxtId
             // 
@@ -94,9 +94,9 @@
             this.panel1.Controls.Add(this.BtnSiguiente);
             this.panel1.Controls.Add(this.BtnUltimo);
             this.panel1.Controls.Add(this.BtnPrimero);
-            this.panel1.Location = new System.Drawing.Point(25, 133);
+            this.panel1.Location = new System.Drawing.Point(12, 133);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(444, 90);
+            this.panel1.Size = new System.Drawing.Size(477, 90);
             this.panel1.TabIndex = 6;
             // 
             // BtnActualizar
@@ -104,7 +104,7 @@
             this.BtnActualizar.BackColor = System.Drawing.Color.White;
             this.BtnActualizar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnActualizar.ForeColor = System.Drawing.Color.Black;
-            this.BtnActualizar.Location = new System.Drawing.Point(327, 10);
+            this.BtnActualizar.Location = new System.Drawing.Point(352, 10);
             this.BtnActualizar.Name = "BtnActualizar";
             this.BtnActualizar.Size = new System.Drawing.Size(105, 30);
             this.BtnActualizar.TabIndex = 7;
@@ -117,7 +117,7 @@
             this.BtnSalir.BackColor = System.Drawing.Color.White;
             this.BtnSalir.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnSalir.ForeColor = System.Drawing.Color.Black;
-            this.BtnSalir.Location = new System.Drawing.Point(327, 46);
+            this.BtnSalir.Location = new System.Drawing.Point(352, 46);
             this.BtnSalir.Name = "BtnSalir";
             this.BtnSalir.Size = new System.Drawing.Size(105, 30);
             this.BtnSalir.TabIndex = 6;
@@ -133,9 +133,9 @@
             this.BtnEliminar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnEliminar.ForeColor = System.Drawing.Color.Black;
             this.BtnEliminar.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.BtnEliminar.Location = new System.Drawing.Point(221, 46);
+            this.BtnEliminar.Location = new System.Drawing.Point(241, 46);
             this.BtnEliminar.Name = "BtnEliminar";
-            this.BtnEliminar.Size = new System.Drawing.Size(90, 30);
+            this.BtnEliminar.Size = new System.Drawing.Size(105, 30);
             this.BtnEliminar.TabIndex = 5;
             this.BtnEliminar.Text = "&Eliminar";
             this.BtnEliminar.UseVisualStyleBackColor = false;
@@ -146,9 +146,9 @@
             this.BtnRegistrar.BackColor = System.Drawing.Color.White;
             this.BtnRegistrar.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnRegistrar.ForeColor = System.Drawing.Color.Black;
-            this.BtnRegistrar.Location = new System.Drawing.Point(221, 10);
+            this.BtnRegistrar.Location = new System.Drawing.Point(241, 10);
             this.BtnRegistrar.Name = "BtnRegistrar";
-            this.BtnRegistrar.Size = new System.Drawing.Size(90, 30);
+            this.BtnRegistrar.Size = new System.Drawing.Size(105, 30);
             this.BtnRegistrar.TabIndex = 4;
             this.BtnRegistrar.Text = "&Registrar";
             this.BtnRegistrar.UseVisualStyleBackColor = false;
@@ -159,9 +159,9 @@
             this.BtnAnterior.BackColor = System.Drawing.Color.White;
             this.BtnAnterior.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnAnterior.ForeColor = System.Drawing.Color.Black;
-            this.BtnAnterior.Location = new System.Drawing.Point(115, 10);
+            this.BtnAnterior.Location = new System.Drawing.Point(16, 46);
             this.BtnAnterior.Name = "BtnAnterior";
-            this.BtnAnterior.Size = new System.Drawing.Size(90, 30);
+            this.BtnAnterior.Size = new System.Drawing.Size(105, 30);
             this.BtnAnterior.TabIndex = 3;
             this.BtnAnterior.Text = "&Anterior";
             this.BtnAnterior.UseVisualStyleBackColor = false;
@@ -172,9 +172,9 @@
             this.BtnSiguiente.BackColor = System.Drawing.Color.White;
             this.BtnSiguiente.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnSiguiente.ForeColor = System.Drawing.Color.Black;
-            this.BtnSiguiente.Location = new System.Drawing.Point(115, 46);
+            this.BtnSiguiente.Location = new System.Drawing.Point(127, 46);
             this.BtnSiguiente.Name = "BtnSiguiente";
-            this.BtnSiguiente.Size = new System.Drawing.Size(90, 30);
+            this.BtnSiguiente.Size = new System.Drawing.Size(105, 30);
             this.BtnSiguiente.TabIndex = 2;
             this.BtnSiguiente.Text = "&Siguiente";
             this.BtnSiguiente.UseVisualStyleBackColor = false;
@@ -185,9 +185,9 @@
             this.BtnUltimo.BackColor = System.Drawing.Color.White;
             this.BtnUltimo.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnUltimo.ForeColor = System.Drawing.Color.Black;
-            this.BtnUltimo.Location = new System.Drawing.Point(9, 46);
+            this.BtnUltimo.Location = new System.Drawing.Point(127, 10);
             this.BtnUltimo.Name = "BtnUltimo";
-            this.BtnUltimo.Size = new System.Drawing.Size(90, 30);
+            this.BtnUltimo.Size = new System.Drawing.Size(105, 30);
             this.BtnUltimo.TabIndex = 1;
             this.BtnUltimo.Text = "&Ultimo";
             this.BtnUltimo.UseVisualStyleBackColor = false;
@@ -198,9 +198,9 @@
             this.BtnPrimero.BackColor = System.Drawing.Color.White;
             this.BtnPrimero.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnPrimero.ForeColor = System.Drawing.Color.Black;
-            this.BtnPrimero.Location = new System.Drawing.Point(9, 10);
+            this.BtnPrimero.Location = new System.Drawing.Point(16, 10);
             this.BtnPrimero.Name = "BtnPrimero";
-            this.BtnPrimero.Size = new System.Drawing.Size(90, 30);
+            this.BtnPrimero.Size = new System.Drawing.Size(105, 30);
             this.BtnPrimero.TabIndex = 0;
             this.BtnPrimero.Text = "&Primero";
             this.BtnPrimero.UseVisualStyleBackColor = false;
@@ -208,7 +208,6 @@
             // 
             // CboEstado
             // 
-            this.CboEstado.Enabled = false;
             this.CboEstado.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CboEstado.FormattingEnabled = true;
             this.CboEstado.Location = new System.Drawing.Point(113, 93);

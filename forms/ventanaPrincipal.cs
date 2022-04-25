@@ -15,7 +15,7 @@ namespace Sistema_Inventarios
         public ventanaPrincipal()
         {
             InitializeComponent();
-        }
+        } 
          
         private void datosDeLaEmpresaToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows.Forms; 
 using System.Data.SqlClient;
 
 namespace Sistema_Inventarios
@@ -18,185 +18,138 @@ namespace Sistema_Inventarios
             InitializeComponent(); 
         }
 
-        public SqlDataAdapter BDControl, BDCiudades;
-        public DataSet TBControl, TBCiudades;
-        public string conexion, nomCiu, con;
-        public int idCiu;
         public SqlCommand cmd;
-        public DataRow Registro, RegCiu, Reg2;
         SQL sql = new SQL();
         int pos = 0;
+        public SqlDataAdapter bdCiudades;
+        public DataSet tbCiudades;
+        public DataRow regCiudades;
+        string edo;
+
+        public void showData()
+        {
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Ciudades", sql.connect());
+            bdCiudades = new SqlDataAdapter(cmd);
+            tbCiudades = new DataSet();
+            bdCiudades.Fill(tbCiudades, "Ciudades");
+            if (pos > BindingContext[tbCiudades, "Ciudades"].Count - 1)
+            {
+                pos -= 1;
+            }
+            else if (pos <= 0)
+            {
+                pos = 0;
+            }
+            BindingContext[tbCiudades, "Ciudades"].Position = pos;
+            regCiudades = tbCiudades.Tables["Ciudades"].Rows[pos];
+            TxtId.Text = Convert.ToString(regCiudades["Id"]);
+            TxtNombre.Text = Convert.ToString(regCiudades["Nombre"]);
+            //CboEstado.Text = Convert.ToString(regCiudades["IdEdo"]);
+
+            CboEstado.SelectedItem = Convert.ToString(regCiudades["IdEdo"]);
+            SqlDataAdapter estados = new SqlDataAdapter("SELECT Nombre, Id FROM Estados", sql.getConn());
+            DataTable tbEstados = new DataTable();
+            estados.Fill(tbEstados);
+            CboEstado.Items.Clear();
+            for (int m = 0; m < tbEstados.Rows.Count; m++)
+            {
+                CboEstado.Items.Add(tbEstados.Rows[m]["Nombre"].ToString());
+                if (Convert.ToString(tbEstados.Rows[m]["Id"]) == Convert.ToString(regCiudades["IdEdo"]))
+                {
+                    edo = tbEstados.Rows[m]["Nombre"].ToString();
+                }
+            }
+            CboEstado.SelectedItem = edo;
+        }
 
         private void BtnPrimero_Click(object sender, EventArgs e)
         {
             pos = 0;
-            Registro = TBControl.Tables["Control"].Rows[pos];
-            visualizaDatos();
-            /*
-            try
-            {
-                string StrControl = "SELECT top 1 * FROM Ciudades";
-                cmd = new SqlCommand(StrControl, sql.connect());
-                BDControl = new SqlDataAdapter(cmd);
-                TBControl = new DataSet();
-                BDControl.Fill(TBControl, "Control");
-                Registro = TBControl.Tables["Control"].Rows[0];
-                visualizaDatos();
-            }
-            catch
-            {
-                MessageBox.Show("Error.");
-            }
-            */
+            showData();
         }
 
         private void BtnSiguiente_Click(object sender, EventArgs e)
         {
-            if (pos >= TBControl.Tables["Control"].Rows.Count - 1)
-            {
-                MessageBox.Show("No existen más ciudades registradas.");
-            }
-            else
-            {
-                pos += 1;
-                Registro = TBControl.Tables["Control"].Rows[pos];
-            }
-            visualizaDatos();
-            /*
-            try
-            {
-                
-                string StrControl = "SELECT * FROM Ciudades WHERE Id > @IdPlus";
-                cmd = new SqlCommand(StrControl, sql.connect());
-
-                cmd.Parameters.Add("@IdPlus", SqlDbType.Int).Value = Convert.ToInt32(TxtId.Text);
-
-                BDControl = new SqlDataAdapter(cmd);
-                TBControl = new DataSet();
-                BDControl.Fill(TBControl, "Control");
-                
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-                MessageBox.Show("No existen más ciudades registradas.");
-            }
-            */
+            pos += 1;
+            showData();
         }
 
         private void BtnAnterior_Click(object sender, EventArgs e)
         {
-            if (pos == 0)
-            {
-                MessageBox.Show("Este es el primer registro.");
-            }
-            else
-            {
-                pos -= 1;
-                Registro = TBControl.Tables["Control"].Rows[pos];
-            }
-            visualizaDatos();
-            /*
-            try
-            {
-
-                string StrControl = "SELECT top 1 * FROM Ciudades WHERE Id < @IdLess ORDER BY Id DESC";
-                cmd = new SqlCommand(StrControl, sql.connect());
-
-                cmd.Parameters.Add("@IdLess", SqlDbType.Int).Value = Convert.ToInt32(TxtId.Text);
-
-                BDControl = new SqlDataAdapter(cmd);
-                TBControl = new DataSet();
-                BDControl.Fill(TBControl, "Control");
-                Registro = TBControl.Tables["Control"].Rows[0];
-                visualizaDatos();
-            }
-            catch
-            {
-                MessageBox.Show("Este es el primer registro.");
-            }
-            */
+            pos -= 1;
+            showData();
         }
          
         private void BtnUltimo_Click(object sender, EventArgs e)
         {
-            pos = TBControl.Tables["Control"].Rows.Count - 1;
-            Registro = TBControl.Tables["Control"].Rows[pos];
-            visualizaDatos();
-            /*
             try
             {
-                string StrControl = "SELECT TOP 1 * FROM Ciudades ORDER BY Id DESC;";
-                cmd = new SqlCommand(StrControl, sql.connect());
-                BDControl = new SqlDataAdapter(cmd);
-                TBControl = new DataSet();
-                BDControl.Fill(TBControl, "Control");
-                Registro = TBControl.Tables["Control"].Rows[0];
-                visualizaDatos();
+                pos = BindingContext[tbCiudades, "Ciudades"].Count - 1;
+                showData();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Error.");
+                MessageBox.Show(ex.ToString());
             }
-            */
         }
 
         private void BtnActualizar_Click(object sender, EventArgs e)
         {
-            int idEdo = 1;
-            string str2 = "SELECT * FROM Estados";
-            SqlCommand cmd2 = new SqlCommand(str2, sql.connect());
-            SqlDataAdapter bd2 = new SqlDataAdapter(cmd2);
-            DataSet tb2 = new DataSet();
-            bd2.Fill(tb2, "Control");
-            for (int m = 0; m < tb2.Tables["Control"].Rows.Count; m++)
+            if (TxtNombre.Text == "")
             {
-                Reg2 = tb2.Tables["Control"].Rows[m];
-                if (Convert.ToString(Reg2["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
-                {
-                    idEdo = Convert.ToInt32(Reg2["Id"]);
-                }
+                MessageBox.Show("Llena todos los campos.");
             }
-            cmd.CommandText = "UPDATE Ciudades SET " +
-                              "Nombre='" + TxtNombre.Text +
-                              "',IdEdo=" + idEdo +
-                              " WHERE Id=" + TxtId.Text;
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("Registro Actualizado");
-            //TBControl.Clear(BDControl, "Control");
-            Registro = TBControl.Tables["Control"].Rows[pos];
-            visualizaDatos();
+            else
+            {
+                try
+                {
+                    int idEdo = 1;
+                    string str2 = "SELECT * FROM Estados";
+                    SqlCommand cmd2 = new SqlCommand(str2, sql.connect());
+                    SqlDataAdapter bd2 = new SqlDataAdapter(cmd2);
+                    DataSet tb2 = new DataSet();
+                    bd2.Fill(tb2, "Control");
+                    for (int m = 0; m < tb2.Tables["Control"].Rows.Count; m++)
+                    {
+                        DataRow Reg2 = tb2.Tables["Control"].Rows[m];
+                        if (Convert.ToString(Reg2["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
+                        {
+                            idEdo = Convert.ToInt32(Reg2["Id"]);
+                        }
+                    }
+                    SqlCommand cmd = new SqlCommand("UPDATE Ciudades SET " +
+                                      "Nombre='" + TxtNombre.Text +
+                                      "',IdEdo=" + idEdo +
+                                      " WHERE Id=" + TxtId.Text, sql.connect());
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Datos Actualizados Correctamente");
+                    //TBControl.Clear(BDControl, "Control");
+                    //DataRow Registro = TBControl.Tables["Control"].Rows[pos];
+                    showData();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            } 
         }
 
         private void BtnEliminar_Click(object sender, EventArgs e)
         {
-            try
+            if (MessageBox.Show("Quieres eliminar a esta ciudad?", "Advertencia", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                idCiu = Convert.ToInt32(TxtId.Text);
-                string StrControl = "DELETE FROM Ciudades WHERE Id = " + idCiu + ";" ;
-                //cmd.Parameters.Add("@Id", SqlDbType.Int).Value = idCiu;
-                cmd.Parameters.AddWithValue("@Id", idCiu);
-                cmd = new SqlCommand(StrControl, sql.connect());
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Registro eliminado exitosamente.");
-                //BDControl.Update(TBControl, "Control");
-                cmd = new SqlCommand(StrControl, sql.connect());
-                BDControl = new SqlDataAdapter(cmd);
-                TBControl = new DataSet();
-                BDControl.Fill(TBControl, "Control");
-                if (pos == 0)
+                try
                 {
-                    pos += 1;
+                    int idCiu = Convert.ToInt32(TxtId.Text);
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Ciudades WHERE Id = " + idCiu + ";", sql.connect());
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Datos Eliminados Correctamente");
+                    showData();
                 }
-                else
+                catch (Exception ex)
                 {
-                    pos -= 1;
+                    MessageBox.Show(ex.Message);
                 }
-                visualizaDatos();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
             }
         }
 
@@ -207,58 +160,75 @@ namespace Sistema_Inventarios
 
         private void BtnRegistrar_Click(object sender, EventArgs e)
         {
-            if (BtnRegistrar.Text == "&Registrar")
+            if (TxtNombre.Text == "")
             {
-                cmd = new SqlCommand("INSERT INTO Ciudades VALUES (1,'') ; SELECT SCOPE_IDENTITY()", sql.getConn());
-                int id = Convert.ToInt32(cmd.ExecuteScalar());
-                TxtNombre.Text = "";
-                BtnPrimero.Enabled = false;
-                BtnUltimo.Enabled = false;
-                BtnSiguiente.Enabled = false;
-                BtnAnterior.Enabled = false;
-                BtnEliminar.Enabled = false;
-                BtnActualizar.Enabled = false;
-                BtnSalir.Enabled = false;
-                CboEstado.Enabled = true;
-                TxtId.Text = Convert.ToString(id);
-                BtnRegistrar.Text = "Aceptar";
+                MessageBox.Show("Llena todos los campos.");
             }
             else
             {
-                int idEdo = 1;
-                string str2 = "SELECT * FROM Estados";
-                SqlCommand cmd2 = new SqlCommand(str2, sql.connect());
-                SqlDataAdapter bd2 = new SqlDataAdapter(cmd2);
-                DataSet tb2 = new DataSet();
-                bd2.Fill(tb2, "Control");
-                for (int m = 0; m < tb2.Tables["Control"].Rows.Count; m++)
+                try
                 {
-                    Reg2 = tb2.Tables["Control"].Rows[m];
-                    if (Convert.ToString(Reg2["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
+                    if (BtnRegistrar.Text == "&Registrar")
                     {
-                        idEdo = Convert.ToInt32(Reg2["Id"]);
+                        SqlCommand cmd = new SqlCommand("INSERT INTO Ciudades VALUES (1,'') ; SELECT SCOPE_IDENTITY()", sql.getConn());
+                        int id = Convert.ToInt32(cmd.ExecuteScalar());
+                        TxtNombre.Text = "";
+                        BtnPrimero.Enabled = false;
+                        BtnUltimo.Enabled = false;
+                        BtnSiguiente.Enabled = false;
+                        BtnAnterior.Enabled = false;
+                        BtnEliminar.Enabled = false;
+                        BtnActualizar.Enabled = false;
+                        BtnSalir.Enabled = false;
+                        CboEstado.SelectedIndex = 0;
+                        //CboEstado.Enabled = true;
+                        TxtId.Text = Convert.ToString(id);
+                        BtnRegistrar.Text = "Aceptar";
+                    }
+                    else
+                    {
+                        int idEdo = 1;
+                        string str2 = "SELECT * FROM Estados";
+                        SqlCommand cmd2 = new SqlCommand(str2, sql.connect());
+                        SqlDataAdapter bd2 = new SqlDataAdapter(cmd2);
+                        DataSet tb2 = new DataSet();
+                        bd2.Fill(tb2, "Estados");
+                        for (int m = 0; m < tb2.Tables["Estados"].Rows.Count; m++)
+                        {
+                            DataRow Reg2 = tb2.Tables["Estados"].Rows[m];
+                            if (Convert.ToString(Reg2["Nombre"]) == Convert.ToString(CboEstado.SelectedItem))
+                            {
+                                idEdo = Convert.ToInt32(Reg2["Id"]);
+                            }
+                        }
+                        SqlCommand cmd = new SqlCommand ("UPDATE Ciudades SET " +
+                                          "Nombre='" + TxtNombre.Text +
+                                          "',IdEdo=" + idEdo +
+                                          " WHERE Id=" + TxtId.Text, sql.connect());
+                        cmd.ExecuteNonQuery();
+                        showData();
+                        MessageBox.Show("Datos Guardados Correctamente");
+                        BtnPrimero.Enabled = true;
+                        BtnUltimo.Enabled = true;
+                        BtnSiguiente.Enabled = true;
+                        BtnAnterior.Enabled = true;
+                        BtnEliminar.Enabled = true;
+                        BtnActualizar.Enabled = true;
+                        BtnSalir.Enabled = true;
+                        //CboEstado.Enabled = false;
+                        BtnRegistrar.Text = "&Registrar";
                     }
                 }
-                cmd.CommandText = "UPDATE Ciudades SET " +
-                                  "Nombre='" + TxtNombre.Text + 
-                                  "',IdEdo=" + idEdo +
-                                  " WHERE Id=" + TxtId.Text;
-                cmd.ExecuteNonQuery();
-                visualizaDatos();
-                BtnPrimero.Enabled = true;
-                BtnUltimo.Enabled = true;
-                BtnSiguiente.Enabled = true;
-                BtnAnterior.Enabled = true;
-                BtnEliminar.Enabled = true;
-                BtnActualizar.Enabled = true;
-                BtnSalir.Enabled = true;
-                CboEstado.Enabled = false;
-                BtnRegistrar.Text = "&Registrar";
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }      
         }
 
         private void Frm_Ciudades_Load(object sender, EventArgs e)
         {
+            /*
             string StrControl = "SELECT * FROM Estados";
             cmd = new SqlCommand(StrControl, sql.connect());
             BDControl = new SqlDataAdapter(cmd);
@@ -277,8 +247,10 @@ namespace Sistema_Inventarios
 
             Registro = TBControl.Tables["Control"].Rows[0];
             visualizaDatos();
+            */
+            showData();
         }
-
+        /*
         public void visualizaDatos()
         {
             BDControl.Dispose();
@@ -297,5 +269,6 @@ namespace Sistema_Inventarios
                 CboEstado.SelectedIndex = -1;
             }
         }
+        */
     }
 }

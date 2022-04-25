@@ -18,41 +18,55 @@ namespace Sistema_Inventarios.forms
 
         public inicioSesion()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         } 
       
         private void Login_Load(object sender, EventArgs e)
         {
             sql.connect();
-            string queryComm = "SELECT * FROM Control";
-            SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
-            SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
-            DataSet tbControl = new DataSet();
-            dbControl.Fill(tbControl, "Control");
-            DataRow reg = tbControl.Tables["Control"].Rows[0];
-            byte[] byteImg = ((byte[])reg["Logo"]);
-            pictureBox1.Image = ByteArrayToImage(byteImg);
+            try
+            {
+                string queryComm = "SELECT * FROM Control";
+                SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
+                SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
+                DataSet tbControl = new DataSet();
+                dbControl.Fill(tbControl, "Control"); 
+                DataRow reg = tbControl.Tables["Control"].Rows[0];
+                byte[] byteImg = ((byte[])reg["Logo"]);
+                pictureBox1.Image = ByteArrayToImage(byteImg);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            string queryComm = "SELECT Usuario, Password FROM Control";
-            SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
-            SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
-            DataSet tbControl = new DataSet();
-            dbControl.Fill(tbControl, "Control"); 
-            DataRow reg = tbControl.Tables["Control"].Rows[0];
-            if (txtUsuario.Text == Convert.ToString(reg["Usuario"]) && (txtContra.Text == Convert.ToString(reg["Password"])))
+            try
             {
-                ventanaPrincipal ventanaPrincipal = new ventanaPrincipal();
-                this.Hide();
-                ventanaPrincipal.ShowDialog();
-                Dispose();
-                Close();
+                string queryComm = "SELECT Usuario, Password FROM Control";
+                SqlCommand cmd = new SqlCommand(queryComm, sql.getConn());
+                SqlDataAdapter dbControl = new SqlDataAdapter(cmd);
+                DataSet tbControl = new DataSet();
+                dbControl.Fill(tbControl, "Control");
+                DataRow reg = tbControl.Tables["Control"].Rows[0];
+                if (txtUsuario.Text == Convert.ToString(reg["Usuario"]) && (txtContra.Text == Convert.ToString(reg["Password"])))
+                {
+                    ventanaPrincipal ventanaPrincipal = new ventanaPrincipal();
+                    this.Hide();
+                    ventanaPrincipal.ShowDialog();
+                    Dispose();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Datos Incorrectos!!!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Datos Incorrectos!!!");
+                MessageBox.Show(ex.ToString());
             }
         }
         public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
