@@ -170,15 +170,37 @@ namespace Sistema_Inventarios
                 tbControl.Clear();
                 bdControl.Fill(tbControl, "Control");
                 regControl = tbControl.Tables["Control"].Rows[0];
-
+                /*
                 PrintPreviewDialog ppd = new PrintPreviewDialog();
                 ppd.Document = printDocument1;
                 ((Form)ppd).WindowState = FormWindowState.Maximized;
                 ppd.ShowDialog();
-
+                */
                 printDocument1.PrinterSettings.PrinterName = "Microsoft Print to PDF";
+                printDocument1.PrinterSettings.PrintFileName = @"C:\Users\public\Documents\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
+                printDocument1.PrinterSettings.PrintToFile = true;
+                PrintPreviewDialog ppd = new PrintPreviewDialog();
+                ppd.Document = printDocument1;
+                ((Form)ppd).WindowState = FormWindowState.Maximized;
+                ppd.ShowDialog();
+                printDocument1.Print();
+                ((Form)ppd).Close();
+
+                string emisor = Convert.ToString(regControl["Correo"]).Trim();
+                string password = Convert.ToString(regControl["PasswordCorreo"]).Trim();
+                string asunto = "Factura No. " + txtFolio.Text.Trim();
+                string msg = " ";
+                string receptor = Convert.ToString(regClientes["Correo"]).Trim();
+                string adjunto = @"C:\Users\public\Documents\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
+                enviarCorreo(emisor, password, asunto, msg, receptor, adjunto);
             } 
-        }  
+        }
+
+        public static void enviarCorreo(string emisor, string password, string asunto, string msg, string receptor, string adjunto)
+        { 
+            
+        }
+
         public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
         {
             MemoryStream ms = new MemoryStream(byteImg);
