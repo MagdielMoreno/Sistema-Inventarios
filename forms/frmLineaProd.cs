@@ -140,7 +140,7 @@ namespace Sistema_Inventarios
                         showData();
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     MessageBox.Show("Error en el tipo de datos.");
                 }
@@ -191,7 +191,7 @@ namespace Sistema_Inventarios
                     MessageBox.Show("Datos Actualizados Correctamente");
                     showData();
                 }
-                catch (Exception ex)
+                catch
                 {
                     MessageBox.Show("Error en el tipo de datos.");
                 }

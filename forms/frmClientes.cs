@@ -503,7 +503,7 @@ namespace Sistema_Inventarios.forms
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Datos Actualizados Correctamente");
                 }
-                catch (Exception ex)
+                catch
                 {
                     MessageBox.Show("Error en el tipo de datos.");
                 }

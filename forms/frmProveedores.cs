@@ -197,7 +197,7 @@ namespace Sistema_Inventarios
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Error en el tipo de datos.");
             }
@@ -320,7 +320,7 @@ namespace Sistema_Inventarios
                     }
                 } 
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Error en el tipo de datos.");
             }

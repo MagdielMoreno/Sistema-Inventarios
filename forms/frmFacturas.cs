@@ -100,25 +100,25 @@ namespace Sistema_Inventarios
             {
                 string query1 = "INSERT INTO FacturasVtas VALUES(" +
                     "@Folio," +
+                    "@Tipo," +
                     "@Cliente," +
                     "@Fecha," +
                     "@Observacion," +
                     "@Status," +
-                    "@Tipo," +
                     "@EnvioFactura," +
                     "@Impreso," +
                     "@Timbrado)";
                 SqlCommand cmd1 = new SqlCommand(query1, sql.getConn());
                 cmd1.Parameters.Clear();
                 cmd1.Parameters.AddWithValue("@Folio", Convert.ToInt32(txtFolio.Text));
-                cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
-                cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
-                cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
-                cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
                 if (rdbContado.Checked)
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
                 else
                     cmd1.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
+                cmd1.Parameters.AddWithValue("@Cliente", Convert.ToInt32(regClientes["Id"]));
+                cmd1.Parameters.AddWithValue("@Fecha", Convert.ToDateTime(dtpFecha.Value));
+                cmd1.Parameters.AddWithValue("@Observacion", Convert.ToString(txtObservaciones.Text));
+                cmd1.Parameters.AddWithValue("@Status", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@EnvioFactura", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Impreso", Convert.ToInt32(0));
                 cmd1.Parameters.AddWithValue("@Timbrado", Convert.ToInt32(0));
@@ -144,6 +144,7 @@ namespace Sistema_Inventarios
                 {
                     string query2 = "INSERT INTO ProductosVendidos VALUES(" +
                     "@Folio," +
+                    "@Tipo," +
                     "@Producto," +
                     "@Cantidad," +
                     "@Descuento," +
@@ -152,6 +153,10 @@ namespace Sistema_Inventarios
                     cmd2.CommandText = query2;
                     cmd2.Parameters.Clear();
                     cmd2.Parameters.AddWithValue("@Folio", folio);
+                    if (rdbContado.Checked)
+                        cmd2.Parameters.AddWithValue("@Tipo", Convert.ToInt32(1));
+                    else
+                        cmd2.Parameters.AddWithValue("@Tipo", Convert.ToInt32(2));
                     cmd2.Parameters.AddWithValue("@Producto", Convert.ToInt16(dgvProductos.Rows[m].Cells[0].Value));
                     cmd2.Parameters.AddWithValue("@Cantidad", Convert.ToInt16(dgvProductos.Rows[m].Cells[2].Value));
                     cmd2.Parameters.AddWithValue("@Descuento", Convert.ToSingle(dgvProductos.Rows[m].Cells[3].Value));
@@ -177,28 +182,53 @@ namespace Sistema_Inventarios
                 ppd.ShowDialog();
                 */
                 printDocument1.PrinterSettings.PrinterName = "Microsoft Print to PDF";
-                printDocument1.PrinterSettings.PrintFileName = @"C:\Users\public\Documents\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
+                printDocument1.PrinterSettings.PrintFileName = @"C:\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
                 printDocument1.PrinterSettings.PrintToFile = true;
                 PrintPreviewDialog ppd = new PrintPreviewDialog();
                 ppd.Document = printDocument1;
                 ((Form)ppd).WindowState = FormWindowState.Maximized;
                 ppd.ShowDialog();
+                MessageBox.Show("1");
                 printDocument1.Print();
                 ((Form)ppd).Close();
+
+                var dir = new DirectoryInfo(@"C:\facturas-sistema\");
+                dir.Refresh();
+                System.Threading.Thread.Sleep(1000);
 
                 string emisor = Convert.ToString(regControl["Correo"]).Trim();
                 string password = Convert.ToString(regControl["PasswordCorreo"]).Trim();
                 string asunto = "Factura No. " + txtFolio.Text.Trim();
-                string msg = " ";
+                string msg = "Se adjunta la factura correspondiente.";
                 string receptor = Convert.ToString(regClientes["Correo"]).Trim();
-                string adjunto = @"C:\Users\public\Documents\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
+                string adjunto = @"C:\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
                 enviarCorreo(emisor, password, asunto, msg, receptor, adjunto);
             } 
         }
 
         public static void enviarCorreo(string emisor, string password, string asunto, string msg, string receptor, string adjunto)
         { 
-            
+            MailMessage mail = new MailMessage();
+            mail.To.Clear();
+            mail.IsBodyHtml = true;
+            mail.From = new MailAddress(emisor);
+            mail.To.Add(receptor);
+            mail.Subject = asunto;
+            mail.Body = msg;
+            mail.Attachments.Add(new Attachment(adjunto));
+
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com"; //Hotmail = smtp.live.com.mx
+            smtp.Port = 587; //Hotmail = 25, 486, 465
+            smtp.EnableSsl = false;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(emisor, password);
+            smtp.EnableSsl = true;
+            smtp.Send(mail);
+
+            mail.Attachments.Clear();
+            mail.Dispose();
+            MessageBox.Show("Correo enviado correctamente...");
         }
 
         public System.Drawing.Image ByteArrayToImage(byte[] byteImg)
