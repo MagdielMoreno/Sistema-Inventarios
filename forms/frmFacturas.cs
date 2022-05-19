@@ -205,7 +205,7 @@ namespace Sistema_Inventarios
                 enviarCorreo(emisor, password, asunto, msg, receptor, adjunto);
             } 
         }
-
+        //
         public static void enviarCorreo(string emisor, string password, string asunto, string msg, string receptor, string adjunto)
         { 
             MailMessage mail = new MailMessage();
