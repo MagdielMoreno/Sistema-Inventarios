@@ -13,9 +13,11 @@ using System.Net.Mail;
 using System.Net;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Sistema_Inventarios
 {
-    public partial class frmFacturas : Form 
+    public partial class frmFacturas : Form
     {
         SQL sql = new SQL();
         public SqlDataAdapter bdFacturas, bdProdFact, bdClientes, bdProd, bdControl;
@@ -69,22 +71,32 @@ namespace Sistema_Inventarios
         void calcTotales()
         {
             int index = dgvProductos.CurrentRow.Index;
-            float descuento = Convert.ToSingle(dgvProductos.Rows[index].Cells[3].Value) / 100;
-            float importe = Convert.ToInt16(dgvProductos.Rows[index].Cells[2].Value) * Convert.ToInt16(dgvProductos.Rows[index].Cells[4].Value);
-            importe -= importe * descuento;
-            dgvProductos.Rows[index].Cells[5].Value = importe;
-            float subtotal = 0;
-            for (int m = 0; m < dgvProductos.RowCount; m++)
+            int cantidad = Convert.ToInt16(dgvProductos.Rows[index].Cells[2].Value);
+            int cant = Convert.ToInt16(regProd["Existencia"]);
+            if (cantidad > cant)
             {
-                subtotal += Convert.ToSingle(dgvProductos.Rows[m].Cells[5].Value);
+                MessageBox.Show("Ésta cantidad excede la cantidad existente");
+                dgvProductos.Rows[index].Cells[2].Value = cant;
             }
-            txtSubtotal.Text = subtotal.ToString();
-            float descuentoTotal = subtotal * (Convert.ToSingle(regClientes["Descuento"]) / 100);
-            float iva = (subtotal - descuentoTotal) * (Convert.ToSingle(regControl["IVA"]) / 100);
-            float total = subtotal - descuentoTotal + iva;
-            txtDescuento.Text = descuentoTotal.ToString();
-            txtIva.Text = iva.ToString();
-            txtTotal.Text = total.ToString();
+            else
+            {
+                float descuento = Convert.ToSingle(dgvProductos.Rows[index].Cells[3].Value) / 100;
+                float importe = Convert.ToInt16(dgvProductos.Rows[index].Cells[2].Value) * Convert.ToInt16(dgvProductos.Rows[index].Cells[4].Value);
+                importe -= importe * descuento;
+                dgvProductos.Rows[index].Cells[5].Value = importe;
+                float subtotal = 0;
+                for (int m = 0; m < dgvProductos.RowCount; m++)
+                {
+                    subtotal += Convert.ToSingle(dgvProductos.Rows[m].Cells[5].Value);
+                }
+                txtSubtotal.Text = subtotal.ToString();
+                float descuentoTotal = subtotal * (Convert.ToSingle(regClientes["Descuento"]) / 100);
+                float iva = (subtotal - descuentoTotal) * (Convert.ToSingle(regControl["IVA"]) / 100);
+                float total = subtotal - descuentoTotal + iva;
+                txtDescuento.Text = descuentoTotal.ToString();
+                txtIva.Text = iva.ToString();
+                txtTotal.Text = total.ToString();
+            }
         }
 
         private void dgvProductos_CellEndEdit(object sender, DataGridViewCellEventArgs e)
@@ -94,8 +106,22 @@ namespace Sistema_Inventarios
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            int estatus = (Convert.ToInt16(regClientes["Status"]));
+            float limiteCredito = (Convert.ToSingle(regClientes["LimiteCredito"]));
+            float total = float.Parse(txtTotal.Text);
+
             if (txtFolio.Text == "" || txtDatosPersonales.Text == "" || txtObservaciones.Text == "")
+            {
                 MessageBox.Show("LLena todos los campos");
+            }
+            else if (rdbCredito.Checked == true && estatus == 2 && total > limiteCredito)
+            {
+                MessageBox.Show("Se excedió el limite de crédito");
+            }
+            else if (rdbCredito.Checked == true && estatus == 3 || estatus == 4)
+            {
+                MessageBox.Show("Crédito cancelado o suspendido");
+            }
             else
             {
                 string query1 = "INSERT INTO FacturasVtas VALUES(" +
@@ -168,9 +194,9 @@ namespace Sistema_Inventarios
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error al guardar productos: "+ex.Message);
+                        MessageBox.Show("Error al guardar productos: " + ex.Message);
                     }
-                    
+
                 }
                 tbControl.Clear();
                 bdControl.Fill(tbControl, "Control");
@@ -188,7 +214,6 @@ namespace Sistema_Inventarios
                 ppd.Document = printDocument1;
                 ((Form)ppd).WindowState = FormWindowState.Maximized;
                 ppd.ShowDialog();
-                MessageBox.Show("1");
                 printDocument1.Print();
                 ((Form)ppd).Close();
 
@@ -203,11 +228,11 @@ namespace Sistema_Inventarios
                 string receptor = Convert.ToString(regClientes["Correo"]).Trim();
                 string adjunto = @"C:\facturas-sistema\" + txtFolio.Text.Trim() + ".pdf";
                 enviarCorreo(emisor, password, asunto, msg, receptor, adjunto);
-            } 
+            }
         }
         //
         public static void enviarCorreo(string emisor, string password, string asunto, string msg, string receptor, string adjunto)
-        { 
+        {
             MailMessage mail = new MailMessage();
             mail.To.Clear();
             mail.IsBodyHtml = true;
@@ -307,6 +332,9 @@ namespace Sistema_Inventarios
                     e.Graphics.DrawRectangle(Pens.Black, 40, i + 20, 780, (float)0.5);
                 }
                 //Totales
+                Conversores conv = new Conversores();
+                decimal total = Convert.ToDecimal(txtTotal.Text);
+                string letraTotal = conv.enletras(total.ToString());
                 StringFormat sf1 = new StringFormat();
                 sf1.Alignment = StringAlignment.Near;
                 sf1.LineAlignment = StringAlignment.Near;
@@ -321,9 +349,11 @@ namespace Sistema_Inventarios
                 e.Graphics.DrawString("IVA:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1020), sf1);
                 e.Graphics.DrawString("$" + txtIva.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1040), sf2);
                 e.Graphics.DrawString("Total:", new Font("Arial", 14, FontStyle.Bold), Brushes.Black, new Point(50, 1040), sf1);
-                e.Graphics.DrawString("$" + txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
+                //e.Graphics.DrawString("$" + txtTotal.Text, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
+                e.Graphics.DrawString(letraTotal, new Font("Arial", 14, FontStyle.Regular), Brushes.Black, new Point(800, 1060), sf2);
                 e.Graphics.DrawRectangle(Pens.Black, 40, 960, 780, 120);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
@@ -337,7 +367,7 @@ namespace Sistema_Inventarios
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlCommand cmd = new SqlCommand("INSERT INTO FacturasVtas VALUES ("+Convert.ToInt16(regClientes["Id"])+",getDate(),'',1,1,0,0,0); SELECT SCOPE_IDENTITY()", sql.connect());
+            SqlCommand cmd = new SqlCommand("INSERT INTO FacturasVtas VALUES (" + Convert.ToInt16(regClientes["Id"]) + ",getDate(),'',1,1,0,0,0); SELECT SCOPE_IDENTITY()", sql.connect());
             int id = Convert.ToInt32(cmd.ExecuteScalar());
             txtFolio.Text = Convert.ToString(id);
             txtFolio.Enabled = false;
@@ -399,7 +429,7 @@ namespace Sistema_Inventarios
             //opcionesProd.Enabled = false; 
             //totalesProd.Enabled = false;
             btnEliminar.Enabled = false;
-            btnImprimir.Enabled = false; 
+            btnImprimir.Enabled = false;
             cboProdFact.Enabled = false;
             cboCliente.Enabled = false;
         }
@@ -431,7 +461,7 @@ namespace Sistema_Inventarios
             }
             opcionesProd.Enabled = true;
             btnAgregarProd.Enabled = true;
-            btnEliminarProd.Enabled=true;
+            btnEliminarProd.Enabled = true;
             btnModificarProd.Enabled = true;
             cboProdFact.Enabled = true;
             txtDescuento.Text = Convert.ToString(regClientes["Descuento"]) + "%";

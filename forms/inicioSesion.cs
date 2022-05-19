@@ -15,6 +15,7 @@ namespace Sistema_Inventarios.forms
     public partial class inicioSesion : Form
     {
         SQL sql = new SQL();
+        int intentos = 3;
 
         public inicioSesion()
         {
@@ -40,7 +41,7 @@ namespace Sistema_Inventarios.forms
                 MessageBox.Show(ex.ToString());
             }
         }
-
+         
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             try
@@ -51,7 +52,15 @@ namespace Sistema_Inventarios.forms
                 DataSet tbControl = new DataSet();
                 dbControl.Fill(tbControl, "Control");
                 DataRow reg = tbControl.Tables["Control"].Rows[0];
-                if (txtUsuario.Text == Convert.ToString(reg["Usuario"]) && (txtContra.Text == Convert.ToString(reg["Password"])))
+                if (intentos == 0)
+                {
+                    MessageBox.Show("Se acabaron los intentos...");
+                    txtUsuario.Enabled = false;
+                    txtContra.Enabled = false;
+                    txtUsuario.Text = "";
+                    txtContra.Text = "";
+                }
+                else if (txtUsuario.Text == Convert.ToString(reg["Usuario"]) && (txtContra.Text == Convert.ToString(reg["Password"])))
                 {
                     ventanaPrincipal ventanaPrincipal = new ventanaPrincipal();
                     this.Hide();
@@ -61,7 +70,10 @@ namespace Sistema_Inventarios.forms
                 }
                 else
                 {
-                    MessageBox.Show("Datos Incorrectos!!!");
+                    intentos--;
+                    MessageBox.Show("Datos Incorrectos!!!. Te quedan " + intentos + " intentos...");
+                    txtUsuario.Text = "";
+                    txtContra.Text = "";
                 }
             }
             catch (Exception ex)
