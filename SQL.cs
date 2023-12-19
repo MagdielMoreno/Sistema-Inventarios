@@ -11,8 +11,8 @@ namespace Sistema_Inventarios
     class SQL
     {
         SqlConnection conn;
-
-        static string server = "localhost, 1433";
+        //25.14.233.160
+        static string server = "192.168.100.8, 1433";
         static string user = "admin";
         static string password = "E5C7K10fl7Xu";
         static string database = "INVENTARIOS1";
